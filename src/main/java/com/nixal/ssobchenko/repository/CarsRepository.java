@@ -64,7 +64,7 @@ public class CarsRepository implements CrudRepository<Car> {
 
     private static class CarsCopy {
         static void copy(final Car from, final Car to) {
-            to.setManufacturer(from.getManufacturer());
+            to.setCarManufacturer(from.getCarManufacturer());
             to.setModel(from.getModel());
             to.setBodyType(from.getBodyType());
             to.setPrice(from.getPrice());

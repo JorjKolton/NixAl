@@ -8,17 +8,19 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class Car extends Vehicle {
-    private BodyType bodyType;
+    private CarBodyType bodyType;
+    private CarManufacturer carManufacturer;
 
-    public Car(String model, Manufacturer manufacturer, BigDecimal price, BodyType bodyType) {
-        super(model, manufacturer, price);
+    public Car(String model, CarManufacturer carManufacturer, BigDecimal price, CarBodyType bodyType) {
+        super(model, price);
         this.bodyType = bodyType;
+        this.carManufacturer = carManufacturer;
     }
 
     @Override
     public String toString() {
         return "Car {" + bodyType + " from " +
-                manufacturer + ", id = '" + id + '\'' +
+                carManufacturer + ", id = '" + id + '\'' +
                 ", model = '" + model + '\'' +
                 ", price = " + price + "$" + '}';
     }

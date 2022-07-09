@@ -1,8 +1,8 @@
 package com.nixal.ssobchenko.service;
 
-import com.nixal.ssobchenko.model.BodyType;
 import com.nixal.ssobchenko.model.Car;
-import com.nixal.ssobchenko.model.Manufacturer;
+import com.nixal.ssobchenko.model.CarBodyType;
+import com.nixal.ssobchenko.model.CarManufacturer;
 import com.nixal.ssobchenko.repository.CarsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,23 +35,23 @@ public class CarService {
         return result;
     }
 
-    public Car createCar(Manufacturer manufacturer, String price, BodyType bodyType) {
+    public Car createCar(CarManufacturer carManufacturer, String price, CarBodyType carBodyType) {
         int maxModelsCount = 1000;
         final Car car = new Car(
                 "" + RANDOM.nextInt(maxModelsCount),
-                manufacturer, new BigDecimal(price), bodyType);
+                carManufacturer, new BigDecimal(price), carBodyType);
         LOGGER.debug("Created car {}", car.getId());
         return car;
     }
 
-    private Manufacturer getRandomManufacturer() {
-        final Manufacturer[] values = Manufacturer.getCarsManufacturers();
+    private CarManufacturer getRandomManufacturer() {
+        final CarManufacturer[] values = CarManufacturer.values();
         final int index = RANDOM.nextInt(values.length);
         return values[index];
     }
 
-    private BodyType getRandomBodyType() {
-        final BodyType[] values = BodyType.getCarsBodyTypes();
+    private CarBodyType getRandomBodyType() {
+        final CarBodyType[] values = CarBodyType.values();
         final int index = RANDOM.nextInt(values.length);
         return values[index];
     }
@@ -64,38 +64,12 @@ public class CarService {
         CARS_REPOSITORY.create(car);
     }
 
-    public void changeCar(Car car, String model, Manufacturer manufacturer, String price, BodyType bodyType) {
+    public void changeCar(Car car, String model, CarManufacturer carManufacturer, String price, CarBodyType carBodyType) {
         car.setModel(model);
-        car.setManufacturer(manufacturer);
+        car.setCarManufacturer(carManufacturer);
         car.setPrice(new BigDecimal(price));
-        car.setBodyType(bodyType);
-    }
-
-    public void changeCar(Car car, String model, Manufacturer manufacturer, String price) {
-        car.setModel(model);
-        car.setManufacturer(manufacturer);
-        car.setPrice(new BigDecimal(price));
-    }
-
-    public void changeCar(Car car, String model, Manufacturer manufacturer) {
-        car.setModel(model);
-        car.setManufacturer(manufacturer);
-    }
-
-    public void changeCarModel(Car car, String model) {
-        car.setModel(model);
-    }
-
-    public void changeCarPrice(Car car, String price) {
-        car.setPrice(new BigDecimal(price));
-    }
-
-    public void changeCarManufacturer(Car car, Manufacturer manufacturer) {
-        car.setManufacturer(manufacturer);
-    }
-
-    public void changeCarBodyType(Car car, BodyType bodyType) {
-        car.setBodyType(bodyType);
+        car.setBodyType(carBodyType);
+        CARS_REPOSITORY.update(car);
     }
 
     public void deleteCar(Car car) {

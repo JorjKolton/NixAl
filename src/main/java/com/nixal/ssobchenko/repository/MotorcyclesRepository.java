@@ -64,7 +64,7 @@ public class MotorcyclesRepository implements CrudRepository<Motorcycle> {
 
     private static class MotorcyclesCopy {
         static void copy(final Motorcycle from, final Motorcycle to) {
-            to.setManufacturer(from.getManufacturer());
+            to.setMotorcycleManufacturer(from.getMotorcycleManufacturer());
             to.setModel(from.getModel());
             to.setBodyType(from.getBodyType());
             to.setPrice(from.getPrice());

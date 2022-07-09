@@ -1,8 +1,8 @@
 package com.nixal.ssobchenko.service;
 
-import com.nixal.ssobchenko.model.BodyType;
 import com.nixal.ssobchenko.model.Motorcycle;
-import com.nixal.ssobchenko.model.Manufacturer;
+import com.nixal.ssobchenko.model.MotorcycleBodyType;
+import com.nixal.ssobchenko.model.MotorcycleManufacturer;
 import com.nixal.ssobchenko.repository.MotorcyclesRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,22 +35,23 @@ public class MotorcycleService {
         return result;
     }
 
-    public Motorcycle createMotorcycle(Manufacturer manufacturer, String price, BodyType bodyType) {
+    public Motorcycle createMotorcycle(MotorcycleManufacturer motorcycleManufacturer, String price,
+                                       MotorcycleBodyType bodyType) {
         int maxModelsCount = 1000;
         final Motorcycle motorcycle = new Motorcycle("" + RANDOM.nextInt(maxModelsCount),
-                manufacturer, new BigDecimal(price), bodyType);
+                motorcycleManufacturer, new BigDecimal(price), bodyType);
         LOGGER.debug("Created motorcycle {}", motorcycle.getId());
         return motorcycle;
     }
 
-    private Manufacturer getRandomManufacturer() {
-        final Manufacturer[] values = Manufacturer.getMotorcyclesManufacturers();
+    private MotorcycleManufacturer getRandomManufacturer() {
+        final MotorcycleManufacturer[] values = MotorcycleManufacturer.values();
         final int index = RANDOM.nextInt(values.length);
         return values[index];
     }
 
-    private BodyType getRandomBodyType() {
-        final BodyType[] values = BodyType.getMotorcyclesBodyTypes();
+    private MotorcycleBodyType getRandomBodyType() {
+        final MotorcycleBodyType[] values = MotorcycleBodyType.values();
         final int index = RANDOM.nextInt(values.length);
         return values[index];
     }
@@ -63,37 +64,11 @@ public class MotorcycleService {
         MOTORCYCLES_REPOSITORY.create(motorcycle);
     }
 
-    public void changeMotorcycle(Motorcycle motorcycle, String model, Manufacturer manufacturer, String price, BodyType bodyType) {
+    public void changeMotorcycle(Motorcycle motorcycle, String model, MotorcycleManufacturer manufacturer, String price,
+                                 MotorcycleBodyType bodyType) {
         motorcycle.setModel(model);
-        motorcycle.setManufacturer(manufacturer);
+        motorcycle.setMotorcycleManufacturer(manufacturer);
         motorcycle.setPrice(new BigDecimal(price));
-        motorcycle.setBodyType(bodyType);
-    }
-
-    public void changeMotorcycle(Motorcycle motorcycle, String model, Manufacturer manufacturer, String price) {
-        motorcycle.setModel(model);
-        motorcycle.setManufacturer(manufacturer);
-        motorcycle.setPrice(new BigDecimal(price));
-    }
-
-    public void changeMotorcycle(Motorcycle motorcycle, String model, Manufacturer manufacturer) {
-        motorcycle.setModel(model);
-        motorcycle.setManufacturer(manufacturer);
-    }
-
-    public void changeMotorcycleModel(Motorcycle motorcycle, String model) {
-        motorcycle.setModel(model);
-    }
-
-    public void changeMotorcyclePrice(Motorcycle motorcycle, String price) {
-        motorcycle.setPrice(new BigDecimal(price));
-    }
-
-    public void changeMotorcycleManufacturer(Motorcycle motorcycle, Manufacturer manufacturer) {
-        motorcycle.setManufacturer(manufacturer);
-    }
-
-    public void changeMotorcycleBodyType(Motorcycle motorcycle, BodyType bodyType) {
         motorcycle.setBodyType(bodyType);
     }
 

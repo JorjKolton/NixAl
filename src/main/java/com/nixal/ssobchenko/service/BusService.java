@@ -1,7 +1,7 @@
 package com.nixal.ssobchenko.service;
 
 import com.nixal.ssobchenko.model.Bus;
-import com.nixal.ssobchenko.model.Manufacturer;
+import com.nixal.ssobchenko.model.BusManufacturer;
 import com.nixal.ssobchenko.repository.BusesRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,17 +34,17 @@ public class BusService {
         return result;
     }
 
-    public Bus createBus(Manufacturer manufacturer, String price, int numberOfSeats) {
+    public Bus createBus(BusManufacturer busManufacturer, String price, int numberOfSeats) {
         int maxModelsCount = 1000;
         final Bus bus = new Bus(
                 "" + RANDOM.nextInt(maxModelsCount),
-                manufacturer, new BigDecimal(price), numberOfSeats);
+                busManufacturer, new BigDecimal(price), numberOfSeats);
         LOGGER.debug("Created bus {}", bus.getId());
         return bus;
     }
 
-    private Manufacturer getRandomManufacturer() {
-        final Manufacturer[] values = Manufacturer.getBusesManufacturers();
+    private BusManufacturer getRandomManufacturer() {
+        final BusManufacturer[] values = BusManufacturer.values();
         final int index = RANDOM.nextInt(values.length);
         return values[index];
     }
@@ -63,37 +63,10 @@ public class BusService {
         BUSES_REPOSITORY.create(bus);
     }
 
-    public void changeBus(Bus bus, String model, Manufacturer manufacturer, String price, int numberOfSeats) {
+    public void changeBus(Bus bus, String model, BusManufacturer busManufacturer, String price, int numberOfSeats) {
         bus.setModel(model);
-        bus.setManufacturer(manufacturer);
+        bus.setBusManufacturer(busManufacturer);
         bus.setPrice(new BigDecimal(price));
-        bus.setNumberOfSeats(numberOfSeats);
-    }
-
-    public void changeBus(Bus bus, String model, Manufacturer manufacturer, String price) {
-        bus.setModel(model);
-        bus.setManufacturer(manufacturer);
-        bus.setPrice(new BigDecimal(price));
-    }
-
-    public void changeBus(Bus bus, String model, Manufacturer manufacturer) {
-        bus.setModel(model);
-        bus.setManufacturer(manufacturer);
-    }
-
-    public void changeBusModel(Bus bus, String model) {
-        bus.setModel(model);
-    }
-
-    public void changeBusPrice(Bus bus, String price) {
-        bus.setPrice(new BigDecimal(price));
-    }
-
-    public void changeBusManufacturer(Bus bus, Manufacturer manufacturer) {
-        bus.setManufacturer(manufacturer);
-    }
-
-    public void changeBusNumberOfSeats(Bus bus, int numberOfSeats) {
         bus.setNumberOfSeats(numberOfSeats);
     }
 

@@ -9,15 +9,17 @@ import java.math.BigDecimal;
 @Setter
 public class Bus extends Vehicle {
     private int numberOfSeats;
+    private BusManufacturer busManufacturer;
 
-    public Bus(String model, Manufacturer manufacturer, BigDecimal price, int numberOfSeats) {
-        super(model, manufacturer, price);
+    public Bus(String model, BusManufacturer busManufacturer, BigDecimal price, int numberOfSeats) {
+        super(model, price);
         this.numberOfSeats = numberOfSeats;
+        this.busManufacturer = busManufacturer;
     }
 
     @Override
     public String toString() {
-        return "Bus{" + manufacturer + " with " +
+        return "Bus{" + busManufacturer + " with " +
                 numberOfSeats + " seats" +
                 ", id ='" + id + '\'' +
                 ", model ='" + model + '\'' +
