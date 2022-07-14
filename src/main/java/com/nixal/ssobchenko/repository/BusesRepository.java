@@ -2,6 +2,7 @@ package com.nixal.ssobchenko.repository;
 
 import com.nixal.ssobchenko.model.Bus;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,13 +30,22 @@ public class BusesRepository implements CrudRepository<Bus> {
     }
 
     @Override
-    public boolean create(Bus bus) {
+    public boolean save(Bus bus) {
+        if (bus == null) {
+            throw new IllegalArgumentException("Bus must be not null");
+        }
+        if(bus.getPrice().equals(BigDecimal.ZERO)) {
+            bus.setPrice(BigDecimal.valueOf(-1));
+        }
         buses.add(bus);
         return true;
     }
 
     @Override
-    public boolean create(List<Bus> bus) {
+    public boolean saveAll(List<Bus> bus) {
+        if (bus == null) {
+            return false;
+        }
         return buses.addAll(bus);
     }
 

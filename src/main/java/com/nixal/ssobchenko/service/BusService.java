@@ -11,13 +11,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class BusService {
+public record BusService(BusesRepository busesRepository) {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BusService.class);
     private static final Random RANDOM = new Random();
-    private static final BusesRepository BUSES_REPOSITORY = new BusesRepository();
 
-    public List<Bus> createBuses(int count) {
+    public List<Bus> createAndSaveBuses(int count) {
         int maxPrice = 900000;
         int maxModelsCount = 1000;
         List<Bus> result = new LinkedList<>();
@@ -29,17 +28,16 @@ public class BusService {
                     getRandomNumberOfSeats()
             );
             result.add(bus);
+            busesRepository.saveAll(result);
             LOGGER.debug("Created bus {}", bus.getId());
         }
         return result;
     }
 
-    public Bus createBus(BusManufacturer busManufacturer, String price, int numberOfSeats) {
-        int maxModelsCount = 1000;
-        final Bus bus = new Bus(
-                "" + RANDOM.nextInt(maxModelsCount),
-                busManufacturer, new BigDecimal(price), numberOfSeats);
+    public Bus createAndSaveBus(String model, BusManufacturer busManufacturer, String price, int numberOfSeats) {
+        final Bus bus = new Bus(model, busManufacturer, new BigDecimal(price), numberOfSeats);
         LOGGER.debug("Created bus {}", bus.getId());
+        busesRepository.save(bus);
         return bus;
     }
 
@@ -55,35 +53,30 @@ public class BusService {
         return RANDOM.nextInt(maxSeats - minSeats) + minSeats;
     }
 
-    public void saveBuses(List<Bus> buses) {
-        BUSES_REPOSITORY.create(buses);
-    }
-
-    public void saveBus(Bus bus) {
-        BUSES_REPOSITORY.create(bus);
-    }
-
-    public void changeBus(Bus bus, String model, BusManufacturer busManufacturer, String price, int numberOfSeats) {
+    public boolean changeBus(Bus bus, String model, BusManufacturer busManufacturer, String price, int numberOfSeats) {
         bus.setModel(model);
         bus.setBusManufacturer(busManufacturer);
         bus.setPrice(new BigDecimal(price));
         bus.setNumberOfSeats(numberOfSeats);
+        return busesRepository.update(bus);
     }
 
-    public void deleteBus(Bus bus) {
-        if (BUSES_REPOSITORY.delete(bus.getId())) {
+    public boolean deleteBus(Bus bus) {
+        if (busesRepository.delete(bus.getId())) {
             LOGGER.debug("Deleted bus {}", bus.getId());
+            return true;
         } else {
             LOGGER.debug("Bus wasn't deleted {}", bus.getId());
+            return false;
         }
     }
 
     public void print(Bus bus, String name) {
-        System.out.println(name + " = " + BUSES_REPOSITORY.getById(bus.getId()));
+        System.out.println(name + " = " + busesRepository.getById(bus.getId()));
     }
 
     public void printAll() {
-        for (Bus bus : BUSES_REPOSITORY.getAll()) {
+        for (Bus bus : busesRepository.getAll()) {
             System.out.println(bus);
         }
     }

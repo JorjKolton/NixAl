@@ -12,13 +12,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class CarService {
+public record CarService(CarsRepository carsRepository) {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CarService.class);
     private static final Random RANDOM = new Random();
-    private static final CarsRepository CARS_REPOSITORY = new CarsRepository();
 
-    public List<Car> createCars(int count) {
+    public List<Car> createAndSaveCars(int count) {
         int maxPrice = 900000;
         int maxModelsCount = 1000;
         List<Car> result = new LinkedList<>();
@@ -30,17 +29,16 @@ public class CarService {
                     getRandomBodyType()
             );
             result.add(car);
+            carsRepository.saveAll(result);
             LOGGER.debug("Created car {}", car.getId());
         }
         return result;
     }
 
-    public Car createCar(CarManufacturer carManufacturer, String price, CarBodyType carBodyType) {
-        int maxModelsCount = 1000;
-        final Car car = new Car(
-                "" + RANDOM.nextInt(maxModelsCount),
-                carManufacturer, new BigDecimal(price), carBodyType);
+    public Car createAndSaveCar(String model, CarManufacturer carManufacturer, String price, CarBodyType carBodyType) {
+        final Car car = new Car(model, carManufacturer, new BigDecimal(price), carBodyType);
         LOGGER.debug("Created car {}", car.getId());
+        carsRepository.save(car);
         return car;
     }
 
@@ -56,36 +54,30 @@ public class CarService {
         return values[index];
     }
 
-    public void saveCars(List<Car> cars) {
-        CARS_REPOSITORY.create(cars);
-    }
-
-    public void saveCar(Car car) {
-        CARS_REPOSITORY.create(car);
-    }
-
-    public void changeCar(Car car, String model, CarManufacturer carManufacturer, String price, CarBodyType carBodyType) {
+    public boolean changeCar(Car car, String model, CarManufacturer carManufacturer, String price, CarBodyType carBodyType) {
         car.setModel(model);
         car.setCarManufacturer(carManufacturer);
         car.setPrice(new BigDecimal(price));
         car.setBodyType(carBodyType);
-        CARS_REPOSITORY.update(car);
+        return carsRepository.update(car);
     }
 
-    public void deleteCar(Car car) {
-        if (CARS_REPOSITORY.delete(car.getId())) {
+    public boolean deleteCar(Car car) {
+        if (carsRepository.delete(car.getId())) {
             LOGGER.debug("Deleted car {}", car.getId());
+            return true;
         } else {
             LOGGER.debug("Car wasn't deleted {}", car.getId());
+            return false;
         }
     }
 
     public void print(Car car, String name) {
-        System.out.println(name + " = " + CARS_REPOSITORY.getById(car.getId()));
+        System.out.println(name + " = " + carsRepository.getById(car.getId()));
     }
 
     public void printAll() {
-        for (Car car : CARS_REPOSITORY.getAll()) {
+        for (Car car : carsRepository.getAll()) {
             System.out.println(car);
         }
     }
