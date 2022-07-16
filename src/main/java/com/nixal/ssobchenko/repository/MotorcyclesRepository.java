@@ -2,6 +2,7 @@ package com.nixal.ssobchenko.repository;
 
 import com.nixal.ssobchenko.model.Motorcycle;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,14 +30,23 @@ public class MotorcyclesRepository implements CrudRepository<Motorcycle> {
     }
 
     @Override
-    public boolean create(Motorcycle motorcycle) {
+    public boolean save(Motorcycle motorcycle) {
+        if (motorcycle == null) {
+            throw new IllegalArgumentException("Motorcycle must be not null");
+        }
+        if(motorcycle.getPrice().equals(BigDecimal.ZERO)) {
+            motorcycle.setPrice(BigDecimal.valueOf(-1));
+        }
         motorcycles.add(motorcycle);
         return true;
     }
 
     @Override
-    public boolean create(List<Motorcycle> motorcycles) {
-        return this.motorcycles.addAll(motorcycles);
+    public boolean saveAll(List<Motorcycle> motorcycle) {
+        if (motorcycle == null) {
+            return false;
+        }
+        return motorcycles.addAll(motorcycle);
     }
 
     @Override

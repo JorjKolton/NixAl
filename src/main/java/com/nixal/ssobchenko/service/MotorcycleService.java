@@ -12,13 +12,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class MotorcycleService {
+public record MotorcycleService(MotorcyclesRepository motorcyclesRepository) {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MotorcycleService.class);
     private static final Random RANDOM = new Random();
-    private static final MotorcyclesRepository MOTORCYCLES_REPOSITORY = new MotorcyclesRepository();
 
-    public List<Motorcycle> createMotorcycles(int count) {
+    public List<Motorcycle> createAndSaveMotorcycles(int count) {
         int maxPrice = 90000;
         int maxModelsCount = 1000;
         List<Motorcycle> result = new LinkedList<>();
@@ -30,17 +29,17 @@ public class MotorcycleService {
                     getRandomBodyType()
             );
             result.add(motorcycle);
+            motorcyclesRepository.saveAll(result);
             LOGGER.debug("Created motorcycle {}", motorcycle.getId());
         }
         return result;
     }
 
-    public Motorcycle createMotorcycle(MotorcycleManufacturer motorcycleManufacturer, String price,
-                                       MotorcycleBodyType bodyType) {
-        int maxModelsCount = 1000;
-        final Motorcycle motorcycle = new Motorcycle("" + RANDOM.nextInt(maxModelsCount),
-                motorcycleManufacturer, new BigDecimal(price), bodyType);
+    public Motorcycle createAndSaveMotorcycle(String model, MotorcycleManufacturer motorcycleManufacturer, String price,
+                                              MotorcycleBodyType bodyType) {
+        final Motorcycle motorcycle = new Motorcycle(model, motorcycleManufacturer, new BigDecimal(price), bodyType);
         LOGGER.debug("Created motorcycle {}", motorcycle.getId());
+        motorcyclesRepository.save(motorcycle);
         return motorcycle;
     }
 
@@ -56,36 +55,31 @@ public class MotorcycleService {
         return values[index];
     }
 
-    public void saveMotorcycles(List<Motorcycle> cars) {
-        MOTORCYCLES_REPOSITORY.create(cars);
-    }
-
-    public void saveMotorcycle(Motorcycle motorcycle) {
-        MOTORCYCLES_REPOSITORY.create(motorcycle);
-    }
-
-    public void changeMotorcycle(Motorcycle motorcycle, String model, MotorcycleManufacturer manufacturer, String price,
+    public boolean changeMotorcycle(Motorcycle motorcycle, String model, MotorcycleManufacturer manufacturer, String price,
                                  MotorcycleBodyType bodyType) {
         motorcycle.setModel(model);
         motorcycle.setMotorcycleManufacturer(manufacturer);
         motorcycle.setPrice(new BigDecimal(price));
         motorcycle.setBodyType(bodyType);
+        return motorcyclesRepository.update(motorcycle);
     }
 
-    public void deleteMotorcycle(Motorcycle motorcycle) {
-        if (MOTORCYCLES_REPOSITORY.delete(motorcycle.getId())) {
+    public boolean deleteMotorcycle(Motorcycle motorcycle) {
+        if (motorcyclesRepository.delete(motorcycle.getId())) {
             LOGGER.debug("Deleted motorcycle {}", motorcycle.getId());
+            return true;
         } else {
             LOGGER.debug("Motorcycle wasn't deleted {}", motorcycle.getId());
+            return false;
         }
     }
 
     public void print(Motorcycle motorcycle, String name) {
-        System.out.println(name + " = " + MOTORCYCLES_REPOSITORY.getById(motorcycle.getId()));
+        System.out.println(name + " = " + motorcyclesRepository.getById(motorcycle.getId()));
     }
 
     public void printAll() {
-        for (Motorcycle motorcycle : MOTORCYCLES_REPOSITORY.getAll()) {
+        for (Motorcycle motorcycle : motorcyclesRepository.getAll()) {
             System.out.println(motorcycle);
         }
     }

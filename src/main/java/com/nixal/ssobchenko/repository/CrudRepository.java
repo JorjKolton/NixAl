@@ -7,9 +7,9 @@ public interface CrudRepository<T> {
 
     List<T> getAll();
 
-    boolean create(T type);
+    boolean save(T type);
 
-    boolean create(List<T> type);
+    boolean saveAll(List<T> type);
 
     boolean update(T type);
 
