@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,25 +31,25 @@ class CarsRepositoryTest {
 
     @Test
     void getById_findOne() {
-        final Car actual = target.getById(car.getId());
-        assertNotNull(car);
-        assertEquals(car.getId(), actual.getId());
+        final Optional<Car> actual = target.findById(car.getId());
+        assertTrue(actual.isPresent());
+        assertEquals(car.getId(), actual.get().getId());
     }
 
     @Test
     void getById_notFind() {
-        final Car actual = target.getById("123");
-        assertNull(actual);
+        final Optional<Car> actual = target.findById("123");
+        assertFalse(actual.isPresent());
     }
 
     @Test
     void getById_manyCars() {
         final Car otherCar = createSimpleCar();
         target.save(otherCar);
-        final Car actual = target.getById(car.getId());
-        assertNotNull(actual);
-        assertEquals(car.getId(), actual.getId());
-        assertNotEquals(otherCar.getId(), actual.getId());
+        final Optional<Car> actual = target.findById(car.getId());
+        assertTrue(actual.isPresent());
+        assertEquals(car.getId(), actual.get().getId());
+        assertNotEquals(otherCar.getId(), actual.get().getId());
     }
 
     @Test
@@ -72,8 +73,9 @@ class CarsRepositoryTest {
     @Test
     void save_success_changePrice() {
         target.save(car);
-        final Car actual = target.getById(car.getId());
-        assertEquals(BigDecimal.valueOf(-1), actual.getPrice());
+        final Optional<Car> actual = target.findById(car.getId());
+        assertTrue(actual.isPresent());
+        assertEquals(BigDecimal.valueOf(-1), actual.get().getPrice());
     }
 
     @Test
@@ -81,8 +83,9 @@ class CarsRepositoryTest {
         car.setPrice(BigDecimal.ONE);
         final boolean actual = target.save(car);
         assertTrue(actual);
-        final Car actualAuto = target.getById(car.getId());
-        assertEquals(BigDecimal.ONE, actualAuto.getPrice());
+        final Optional<Car> actualAuto = target.findById(car.getId());
+        assertTrue(actualAuto.isPresent());
+        assertEquals(BigDecimal.ONE, actualAuto.get().getPrice());
     }
 
     @Test
@@ -115,8 +118,9 @@ class CarsRepositoryTest {
         car.setPrice(BigDecimal.TEN);
         final boolean actual = target.update(car);
         assertTrue(actual);
-        final Car actualCar = target.getById(car.getId());
-        assertEquals(BigDecimal.TEN, actualCar.getPrice());
+        final Optional<Car> actualCar = target.findById(car.getId());
+        assertTrue(actualCar.isPresent());
+        assertEquals(BigDecimal.TEN, actualCar.get().getPrice());
     }
 
     @Test

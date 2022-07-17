@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public record CarService(CarsRepository carsRepository) {
@@ -72,8 +73,41 @@ public record CarService(CarsRepository carsRepository) {
         }
     }
 
-    public void print(Car car, String name) {
-        System.out.println(name + " = " + carsRepository.getById(car.getId()));
+    public Car getOrCreateCar(String id) {
+        return carsRepository.findById(id).orElse(createAndSaveCars(1).get(0));
+    }
+
+    public BigDecimal getPriceForCarIfItLessThan(String id, String lessPrice) {
+        return carsRepository.findById(id)
+                .map(Car::getPrice)
+                .filter(price -> price.compareTo(new BigDecimal(lessPrice)) < 0)
+                .orElseGet(() -> {
+                    LOGGER.info("The car price is bigger than {}", lessPrice);
+                    return BigDecimal.ZERO;
+                });
+    }
+
+    public Car getCarForId(String id) {
+        return carsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Can't find car with id " + id));
+    }
+
+    public Car getCarWithManufacturer(String id, CarManufacturer manufacturer) {
+        Optional<Car> optionalCar = carsRepository.findById(id)
+                .or(() -> Optional.of(createAndSaveCars(1).get(0)));
+        optionalCar.ifPresent(car -> LOGGER.info("Car manufacturer was {}", car.getCarManufacturer()));
+        if (optionalCar.get().getCarManufacturer().equals(manufacturer)) {
+            return optionalCar.get();
+        } else {
+            optionalCar.get().setCarManufacturer(manufacturer);
+        }
+        return optionalCar.get();
+    }
+
+    public void print(String id, String name) {
+        carsRepository.findById(id).ifPresentOrElse(
+                car -> System.out.println(name + " = " + car),
+                () -> System.out.println("Cannot find auto with id " + id)
+        );
     }
 
     public void printAll() {

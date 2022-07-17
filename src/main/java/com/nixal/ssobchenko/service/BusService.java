@@ -72,7 +72,7 @@ public record BusService(BusesRepository busesRepository) {
     }
 
     public void print(Bus bus, String name) {
-        System.out.println(name + " = " + busesRepository.getById(bus.getId()));
+        System.out.println(name + " = " + busesRepository.findById(bus.getId()));
     }
 
     public void printAll() {

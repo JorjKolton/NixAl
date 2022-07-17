@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class MotorcyclesRepository implements CrudRepository<Motorcycle> {
     private final List<Motorcycle> motorcycles;
@@ -15,13 +16,13 @@ public class MotorcyclesRepository implements CrudRepository<Motorcycle> {
     }
 
     @Override
-    public Motorcycle getById(String id) {
+    public Optional<Motorcycle> findById(String id) {
         for (Motorcycle motorcycle : motorcycles) {
             if (motorcycle.getId().equals(id)) {
-                return motorcycle;
+                return Optional.of(motorcycle);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -51,9 +52,9 @@ public class MotorcyclesRepository implements CrudRepository<Motorcycle> {
 
     @Override
     public boolean update(Motorcycle motorcycle) {
-        final Motorcycle found = getById(motorcycle.getId());
-        if (found != null) {
-            MotorcyclesCopy.copy(motorcycle, found);
+        final Optional<Motorcycle> found = findById(motorcycle.getId());
+        if (found.isPresent()) {
+            MotorcyclesCopy.copy(motorcycle, found.get());
             return true;
         }
         return false;
