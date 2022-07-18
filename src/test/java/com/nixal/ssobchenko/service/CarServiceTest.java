@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +27,7 @@ class CarServiceTest {
     }
 
     private Car createSimpleCar() {
-        return new Car("700", CarManufacturer.BMW,  new BigDecimal("35000"), CarBodyType.CABRIOLET);
+        return new Car("700", CarManufacturer.BMW, new BigDecimal("35000"), CarBodyType.CABRIOLET);
     }
 
     @Test
@@ -59,8 +60,59 @@ class CarServiceTest {
     @Test
     void createCar() {
         final Car actual = createSimpleCar();
-        Mockito.when(carsRepository.getById(Mockito.argThat(arg -> arg == null || arg.length() > 5))).thenReturn(actual);
-        assertEquals(carsRepository.getById("Expected"), actual);
+        Mockito.when(carsRepository.findById(Mockito.argThat(arg -> arg == null || arg.length() > 5)))
+                .thenReturn(Optional.of(actual));
+        final Optional<Car> expected = carsRepository.findById("Expected");
+        assertTrue(expected.isPresent());
+        assertEquals(expected.get(), actual);
+    }
+
+    @Test
+    void getOrCreateCar_get() {
+        final Car actual = target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
+        Mockito.when(carsRepository.findById(actual.getId())).thenReturn(Optional.of(actual));
+        Optional<Car> optionalCar = Optional.of(target.getOrCreateCar(actual.getId()));
+        assertEquals(actual, optionalCar.get());
+    }
+
+    @Test
+    void getOrCreateCar_create() {
+        final Car actual = createSimpleCar();
+        Mockito.when(carsRepository.findById(actual.getId())).thenReturn(Optional.of(createSimpleCar()));
+        Optional<Car> optionalCar = Optional.of(target.getOrCreateCar(actual.getId()));
+        assertNotEquals(actual, optionalCar.get());
+    }
+
+    @Test
+    void getPriceForCarIfItLessThan_success() {
+        final Car actual = target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
+        Mockito.when(carsRepository.findById(actual.getId())).thenReturn(Optional.of(actual));
+        final BigDecimal price = target.getPriceForCarIfItLessThan(actual.getId(), "50000");
+        final boolean expected = price.compareTo(new BigDecimal("50000")) < 0;
+        assertTrue(expected);
+    }
+
+    @Test
+    void getPriceForCarIfItLessThan_fail() {
+        final Car actual = target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
+        final BigDecimal price = target.getPriceForCarIfItLessThan(actual.getId(), "34000");
+        Mockito.verify(carsRepository).findById(actual.getId());
+        assertEquals(BigDecimal.ZERO, price);
+    }
+
+    @Test
+    void getCarForId_success() {
+        final Car actual = target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
+        Mockito.when(carsRepository.findById(actual.getId())).thenReturn(Optional.of(actual));
+        Optional<Car> optionalCar = Optional.of(target.getCarForId(actual.getId()));
+        assertEquals(actual, optionalCar.get());
+    }
+
+    @Test
+    void getCarForId_fail() {
+        final Car actual = createSimpleCar();
+        Mockito.when(carsRepository.findById(actual.getId())).thenThrow(IllegalArgumentException.class);
+        assertThrows(IllegalArgumentException.class, () -> target.getCarForId(actual.getId()));
     }
 
     @Test
@@ -81,6 +133,15 @@ class CarServiceTest {
         assertTrue(expected);
         assertEquals("657", car.getModel());
         assertEquals(car, captor.getValue());
+    }
+
+    @Test
+    void getCarWithManufacturer() {
+        final Car car = target.createAndSaveCar("700", CarManufacturer.AUDI, "35000", CarBodyType.CABRIOLET);
+        final CarManufacturer carManufacturer = CarManufacturer.AUDI;
+        Mockito.when(carsRepository.findById(car.getId())).thenReturn(Optional.of(car));
+        final Car actual = target.getCarWithManufacturer(car.getId(), carManufacturer);
+        assertEquals(carManufacturer, actual.getCarManufacturer());
     }
 
     @Test

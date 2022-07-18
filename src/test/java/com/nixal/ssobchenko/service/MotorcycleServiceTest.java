@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,8 +61,11 @@ class MotorcycleServiceTest {
     @Test
     void createMotorcycle() {
         final Motorcycle actual = createSimpleMotorcycle();
-        Mockito.when(motorcyclesRepository.getById(Mockito.argThat(arg -> arg == null || arg.length() > 5))).thenReturn(actual);
-        assertEquals(motorcyclesRepository.getById("Expected"), actual);
+        Mockito.when(motorcyclesRepository.findById(Mockito.argThat(arg -> arg == null || arg.length() > 5)))
+                .thenReturn(Optional.of(actual));
+        final Optional<Motorcycle> expected = motorcyclesRepository.findById("Expected");
+        assertTrue(expected.isPresent());
+        assertEquals(expected.get(), actual);
     }
 
     @Test

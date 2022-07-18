@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,25 +31,25 @@ class MotorcyclesRepositoryTest {
 
     @Test
     void getById_findOne() {
-        final Motorcycle actual = target.getById(motorcycle.getId());
-        assertNotNull(motorcycle);
-        assertEquals(motorcycle.getId(), actual.getId());
+        final Optional<Motorcycle> actual = target.findById(motorcycle.getId());
+        assertTrue(actual.isPresent());
+        assertEquals(motorcycle.getId(), actual.get().getId());
     }
 
     @Test
     void getById_notFind() {
-        final Motorcycle actual = target.getById("123");
-        assertNull(actual);
+        final Optional<Motorcycle> actual = target.findById("123");
+        assertFalse(actual.isPresent());
     }
 
     @Test
     void getById_manyMotorcycles() {
         final Motorcycle otherMotorcycle = createSimpleMotorcycle();
         target.save(otherMotorcycle);
-        final Motorcycle actual = target.getById(motorcycle.getId());
-        assertNotNull(actual);
-        assertEquals(motorcycle.getId(), actual.getId());
-        assertNotEquals(otherMotorcycle.getId(), actual.getId());
+        final Optional<Motorcycle> actual = target.findById(motorcycle.getId());
+        assertTrue(actual.isPresent());
+        assertEquals(motorcycle.getId(), actual.get().getId());
+        assertNotEquals(otherMotorcycle.getId(), actual.get().getId());
     }
 
     @Test
@@ -72,8 +73,9 @@ class MotorcyclesRepositoryTest {
     @Test
     void save_success_changePrice() {
         target.save(motorcycle);
-        final Motorcycle actual = target.getById(motorcycle.getId());
-        assertEquals(BigDecimal.valueOf(-1), actual.getPrice());
+        final Optional<Motorcycle> actual = target.findById(motorcycle.getId());
+        assertTrue(actual.isPresent());
+        assertEquals(BigDecimal.valueOf(-1), actual.get().getPrice());
     }
 
     @Test
@@ -81,8 +83,9 @@ class MotorcyclesRepositoryTest {
         motorcycle.setPrice(BigDecimal.ONE);
         final boolean actual = target.save(motorcycle);
         assertTrue(actual);
-        final Motorcycle actualMotorcycle = target.getById(motorcycle.getId());
-        assertEquals(BigDecimal.ONE, actualMotorcycle.getPrice());
+        final Optional<Motorcycle> actualMotorcycle = target.findById(motorcycle.getId());
+        assertTrue(actualMotorcycle.isPresent());
+        assertEquals(BigDecimal.ONE, actualMotorcycle.get().getPrice());
     }
 
     @Test
@@ -115,8 +118,9 @@ class MotorcyclesRepositoryTest {
         motorcycle.setPrice(BigDecimal.TEN);
         final boolean actual = target.update(motorcycle);
         assertTrue(actual);
-        final Motorcycle actualMotorcycle = target.getById(motorcycle.getId());
-        assertEquals(BigDecimal.TEN, actualMotorcycle.getPrice());
+        final Optional<Motorcycle> actualMotorcycle = target.findById(motorcycle.getId());
+        assertTrue(actualMotorcycle.isPresent());
+        assertEquals(BigDecimal.TEN, actualMotorcycle.get().getPrice());
     }
 
     @Test

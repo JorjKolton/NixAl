@@ -75,7 +75,7 @@ public record MotorcycleService(MotorcyclesRepository motorcyclesRepository) {
     }
 
     public void print(Motorcycle motorcycle, String name) {
-        System.out.println(name + " = " + motorcyclesRepository.getById(motorcycle.getId()));
+        System.out.println(name + " = " + motorcyclesRepository.findById(motorcycle.getId()));
     }
 
     public void printAll() {
