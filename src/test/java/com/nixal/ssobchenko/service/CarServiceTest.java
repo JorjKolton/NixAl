@@ -31,25 +31,6 @@ class CarServiceTest {
     }
 
     @Test
-    void createCars_negativeCount() {
-        final List<Car> actual = target.createAndSaveCars(-1);
-        assertEquals(0, actual.size());
-    }
-
-    @Test
-    void createCars_zeroCount() {
-        final List<Car> actual = target.createAndSaveCars(0);
-        assertEquals(0, actual.size());
-    }
-
-    @Test
-    void createCars() {
-        target.createAndSaveCars(5);
-        Mockito.verify(carsRepository, Mockito.times(5))
-                .saveAll(Mockito.any());
-    }
-
-    @Test
     void createCar_positive() {
         final List<Car> actual = List
                 .of(target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET));
@@ -142,28 +123,5 @@ class CarServiceTest {
         Mockito.when(carsRepository.findById(car.getId())).thenReturn(Optional.of(car));
         final Car actual = target.getCarWithManufacturer(car.getId(), carManufacturer);
         assertEquals(carManufacturer, actual.getCarManufacturer());
-    }
-
-    @Test
-    void deleteCar_fail() {
-        final Car car = createSimpleCar();
-        final boolean actual = target.deleteCar(car);
-        Mockito.verify(carsRepository).delete(car.getId());
-        assertFalse(actual);
-    }
-
-    @Test
-    void deleteCar_success() {
-        final Car car = target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
-        Mockito.when(carsRepository.delete(car.getId())).thenReturn(true);
-        final boolean actual = target.deleteCar(car);
-        assertTrue(actual);
-    }
-
-    @Test
-    void deleteCar_null() {
-        final Car car = createSimpleCar();
-        Mockito.when(carsRepository.delete(car.getId())).thenThrow(NullPointerException.class);
-        assertThrows(NullPointerException.class, () -> target.deleteCar(car));
     }
 }

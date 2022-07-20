@@ -32,25 +32,6 @@ class MotorcycleServiceTest {
     }
 
     @Test
-    void createMotorcycles_negativeCount() {
-        final List<Motorcycle> actual = target.createAndSaveMotorcycles(-1);
-        assertEquals(0, actual.size());
-    }
-
-    @Test
-    void createMotorcycles_zeroCount() {
-        final List<Motorcycle> actual = target.createAndSaveMotorcycles(0);
-        assertEquals(0, actual.size());
-    }
-
-    @Test
-    void createMotorcycles() {
-        target.createAndSaveMotorcycles(5);
-        Mockito.verify(motorcyclesRepository, Mockito.times(5))
-                .saveAll(Mockito.any());
-    }
-
-    @Test
     void createMotorcycle_positive() {
         final List<Motorcycle> actual = List.of(target.createAndSaveMotorcycle("101",
                 MotorcycleManufacturer.KAWASAKI, "8000", MotorcycleBodyType.MOTOCROSS));
@@ -89,29 +70,5 @@ class MotorcycleServiceTest {
         assertTrue(expected);
         assertEquals("107", motorcycle.getModel());
         assertEquals(motorcycle, captor.getValue());
-    }
-
-    @Test
-    void deleteMotorcycle_fail() {
-        final Motorcycle motorcycle = createSimpleMotorcycle();
-        final boolean actual = target.deleteMotorcycle(motorcycle);
-        Mockito.verify(motorcyclesRepository).delete(motorcycle.getId());
-        assertFalse(actual);
-    }
-
-    @Test
-    void deleteMotorcycle_success() {
-        final Motorcycle motorcycle = target.createAndSaveMotorcycle("101",
-                MotorcycleManufacturer.KAWASAKI, "8000", MotorcycleBodyType.MOTOCROSS);
-        Mockito.when(motorcyclesRepository.delete(motorcycle.getId())).thenReturn(true);
-        final boolean actual = target.deleteMotorcycle(motorcycle);
-        assertTrue(actual);
-    }
-
-    @Test
-    void deleteMotorcycle_null() {
-        final Motorcycle motorcycle = createSimpleMotorcycle();
-        Mockito.when(motorcyclesRepository.delete(motorcycle.getId())).thenThrow(NullPointerException.class);
-        assertThrows(NullPointerException.class, () -> target.deleteMotorcycle(motorcycle));
     }
 }

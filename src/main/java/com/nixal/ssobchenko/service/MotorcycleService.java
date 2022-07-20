@@ -3,44 +3,32 @@ package com.nixal.ssobchenko.service;
 import com.nixal.ssobchenko.model.Motorcycle;
 import com.nixal.ssobchenko.model.MotorcycleBodyType;
 import com.nixal.ssobchenko.model.MotorcycleManufacturer;
-import com.nixal.ssobchenko.repository.MotorcyclesRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.nixal.ssobchenko.repository.CrudRepository;
 
 import java.math.BigDecimal;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 
-public record MotorcycleService(MotorcyclesRepository motorcyclesRepository) {
+public class MotorcycleService extends VehicleService<Motorcycle> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MotorcycleService.class);
-    private static final Random RANDOM = new Random();
-
-    public List<Motorcycle> createAndSaveMotorcycles(int count) {
-        int maxPrice = 90000;
-        int maxModelsCount = 1000;
-        List<Motorcycle> result = new LinkedList<>();
-        for (int i = 0; i < count; i++) {
-            final Motorcycle motorcycle = new Motorcycle(
-                    "" + RANDOM.nextInt(maxModelsCount),
-                    getRandomManufacturer(),
-                    BigDecimal.valueOf(RANDOM.nextInt(maxPrice)),
-                    getRandomBodyType()
-            );
-            result.add(motorcycle);
-            motorcyclesRepository.saveAll(result);
-            LOGGER.debug("Created motorcycle {}", motorcycle.getId());
-        }
-        return result;
+    public MotorcycleService(CrudRepository<Motorcycle> repository) {
+        super(repository);
     }
 
     public Motorcycle createAndSaveMotorcycle(String model, MotorcycleManufacturer motorcycleManufacturer, String price,
                                               MotorcycleBodyType bodyType) {
         final Motorcycle motorcycle = new Motorcycle(model, motorcycleManufacturer, new BigDecimal(price), bodyType);
         LOGGER.debug("Created motorcycle {}", motorcycle.getId());
-        motorcyclesRepository.save(motorcycle);
+        repository.save(motorcycle);
         return motorcycle;
+    }
+
+    @Override
+    protected Motorcycle create() {
+        return new Motorcycle(
+                "" + RANDOM.nextInt(1000),
+                getRandomManufacturer(),
+                BigDecimal.valueOf(RANDOM.nextInt(100000)),
+                getRandomBodyType()
+        );
     }
 
     private MotorcycleManufacturer getRandomManufacturer() {
@@ -61,26 +49,6 @@ public record MotorcycleService(MotorcyclesRepository motorcyclesRepository) {
         motorcycle.setMotorcycleManufacturer(manufacturer);
         motorcycle.setPrice(new BigDecimal(price));
         motorcycle.setBodyType(bodyType);
-        return motorcyclesRepository.update(motorcycle);
-    }
-
-    public boolean deleteMotorcycle(Motorcycle motorcycle) {
-        if (motorcyclesRepository.delete(motorcycle.getId())) {
-            LOGGER.debug("Deleted motorcycle {}", motorcycle.getId());
-            return true;
-        } else {
-            LOGGER.debug("Motorcycle wasn't deleted {}", motorcycle.getId());
-            return false;
-        }
-    }
-
-    public void print(Motorcycle motorcycle, String name) {
-        System.out.println(name + " = " + motorcyclesRepository.findById(motorcycle.getId()));
-    }
-
-    public void printAll() {
-        for (Motorcycle motorcycle : motorcyclesRepository.getAll()) {
-            System.out.println(motorcycle);
-        }
+        return repository.update(motorcycle);
     }
 }
