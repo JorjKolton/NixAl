@@ -29,25 +29,6 @@ class BusServiceTest {
     }
 
     @Test
-    void createBuses_negativeCount() {
-        final List<Bus> actual = target.createAndSaveBuses(-1);
-        assertEquals(0, actual.size());
-    }
-
-    @Test
-    void createBuses_zeroCount() {
-        final List<Bus> actual = target.createAndSaveBuses(0);
-        assertEquals(0, actual.size());
-    }
-
-    @Test
-    void createBuses() {
-        target.createAndSaveBuses(5);
-        Mockito.verify(busesRepository, Mockito.times(5))
-                .saveAll(Mockito.any());
-    }
-
-    @Test
     void createBus_positive() {
         final List<Bus> actual = List
                 .of(target.createAndSaveBus("318", BusManufacturer.TOYOTA, "183000", 43));
@@ -83,28 +64,5 @@ class BusServiceTest {
         assertTrue(expected);
         assertEquals("324", bus.getModel());
         assertEquals(bus, captor.getValue());
-    }
-
-    @Test
-    void deleteBus_fail() {
-        final Bus bus = createSimpleBus();
-        final boolean actual = target.deleteBus(bus);
-        Mockito.verify(busesRepository).delete(bus.getId());
-        assertFalse(actual);
-    }
-
-    @Test
-    void deleteBus_success() {
-        final Bus bus = target.createAndSaveBus("318", BusManufacturer.TOYOTA, "183000", 43);
-        Mockito.when(busesRepository.delete(bus.getId())).thenReturn(true);
-        final boolean actual = target.deleteBus(bus);
-        assertTrue(actual);
-    }
-
-    @Test
-    void deleteBus_null() {
-        final Bus bus = createSimpleBus();
-        Mockito.when(busesRepository.delete(bus.getId())).thenThrow(NullPointerException.class);
-        assertThrows(NullPointerException.class, () -> target.deleteBus(bus));
     }
 }
