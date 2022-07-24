@@ -1,8 +1,8 @@
 package com.nixal.ssobchenko.service;
 
-import com.nixal.ssobchenko.model.Car;
-import com.nixal.ssobchenko.model.CarBodyType;
-import com.nixal.ssobchenko.model.CarManufacturer;
+import com.nixal.ssobchenko.model.vehicle.Car;
+import com.nixal.ssobchenko.model.vehicle.CarBodyType;
+import com.nixal.ssobchenko.model.vehicle.CarManufacturer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

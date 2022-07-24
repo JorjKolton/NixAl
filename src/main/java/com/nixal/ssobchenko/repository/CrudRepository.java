@@ -1,6 +1,6 @@
 package com.nixal.ssobchenko.repository;
 
-import com.nixal.ssobchenko.model.Vehicle;
+import com.nixal.ssobchenko.model.vehicle.Vehicle;
 
 import java.util.List;
 import java.util.Optional;

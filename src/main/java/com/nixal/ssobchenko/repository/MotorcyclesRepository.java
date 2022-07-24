@@ -1,6 +1,6 @@
 package com.nixal.ssobchenko.repository;
 
-import com.nixal.ssobchenko.model.Motorcycle;
+import com.nixal.ssobchenko.model.vehicle.Motorcycle;
 
 import java.math.BigDecimal;
 import java.util.Iterator;

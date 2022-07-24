@@ -1,6 +1,6 @@
 package com.nixal.ssobchenko.service;
 
-import com.nixal.ssobchenko.model.Vehicle;
+import com.nixal.ssobchenko.model.vehicle.Vehicle;
 import com.nixal.ssobchenko.repository.CrudRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
