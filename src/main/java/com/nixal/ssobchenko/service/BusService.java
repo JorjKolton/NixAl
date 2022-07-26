@@ -1,7 +1,7 @@
 package com.nixal.ssobchenko.service;
 
-import com.nixal.ssobchenko.model.Bus;
-import com.nixal.ssobchenko.model.BusManufacturer;
+import com.nixal.ssobchenko.model.vehicle.Bus;
+import com.nixal.ssobchenko.model.vehicle.BusManufacturer;
 import com.nixal.ssobchenko.repository.CrudRepository;
 
 import java.math.BigDecimal;

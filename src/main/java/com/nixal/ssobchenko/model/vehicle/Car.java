@@ -1,4 +1,4 @@
-package com.nixal.ssobchenko.model;
+package com.nixal.ssobchenko.model.vehicle;
 
 import lombok.Getter;
 import lombok.Setter;

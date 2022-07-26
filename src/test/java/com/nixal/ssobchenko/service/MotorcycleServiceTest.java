@@ -1,8 +1,8 @@
 package com.nixal.ssobchenko.service;
 
-import com.nixal.ssobchenko.model.Motorcycle;
-import com.nixal.ssobchenko.model.MotorcycleBodyType;
-import com.nixal.ssobchenko.model.MotorcycleManufacturer;
+import com.nixal.ssobchenko.model.vehicle.Motorcycle;
+import com.nixal.ssobchenko.model.vehicle.MotorcycleBodyType;
+import com.nixal.ssobchenko.model.vehicle.MotorcycleManufacturer;
 import com.nixal.ssobchenko.repository.MotorcyclesRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

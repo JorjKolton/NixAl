@@ -1,4 +1,4 @@
-package com.nixal.ssobchenko.model;
+package com.nixal.ssobchenko.model.vehicle;
 
 public enum BusManufacturer {
     VOLKSWAGEN, FORD, TOYOTA, MERCEDES, RENAULT, MAZDA,
