@@ -21,11 +21,11 @@ class VehicleServiceTest {
     @BeforeEach
     void setUp() {
         carsRepository = Mockito.mock(CarsRepository.class);
-        target = new CarService(carsRepository);
+        target = CarService.getInstance();
     }
 
     private Car createSimpleCar() {
-        return new Car("700", CarManufacturer.BMW, new BigDecimal("35000"), CarBodyType.CABRIOLET);
+        return new Car(700, CarManufacturer.BMW, new BigDecimal("35000"), CarBodyType.CABRIOLET);
     }
 
     @Test
@@ -57,7 +57,7 @@ class VehicleServiceTest {
 
     @Test
     void deleteCar_success() {
-        final Car car = target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
+        final Car car = target.createAndSaveCar(700, CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
         Mockito.when(carsRepository.delete(car.getId())).thenReturn(true);
         final boolean actual = target.delete(car);
         assertTrue(actual);

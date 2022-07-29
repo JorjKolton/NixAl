@@ -1,4 +1,5 @@
 package com.nixal.ssobchenko.model.vehicle;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,16 +11,18 @@ import java.util.UUID;
 @Setter
 public abstract class Vehicle {
     protected final String id;
-    protected String model;
+    protected int model;
     protected BigDecimal price;
+    protected VehicleType type;
 
-    protected Vehicle(String model, BigDecimal price) {
+    protected Vehicle(int model, BigDecimal price, VehicleType type) {
         this.id = UUID.randomUUID().toString();
         this.model = model;
         this.price = price;
+        this.type = type;
     }
 
-    public static class IdComparator implements Comparator <Vehicle> {
+    public static class IdComparator implements Comparator<Vehicle> {
 
         @Override
         public int compare(Vehicle o1, Vehicle o2) {
@@ -27,7 +30,7 @@ public abstract class Vehicle {
         }
     }
 
-    public static class PriceComparator implements Comparator <Vehicle> {
+    public static class PriceComparator implements Comparator<Vehicle> {
 
         @Override
         public int compare(Vehicle o1, Vehicle o2) {
@@ -35,11 +38,11 @@ public abstract class Vehicle {
         }
     }
 
-    public static class ModelComparator implements Comparator <Vehicle> {
+    public static class ModelComparator implements Comparator<Vehicle> {
 
         @Override
         public int compare(Vehicle o1, Vehicle o2) {
-            return o1.getModel().compareTo(o2.getModel());
+            return Integer.compare(o1.getModel(), o2.getModel());
         }
     }
 
@@ -50,16 +53,18 @@ public abstract class Vehicle {
 
         Vehicle vehicle = (Vehicle) o;
 
+        if (model != vehicle.model) return false;
         if (!id.equals(vehicle.id)) return false;
-        if (!model.equals(vehicle.model)) return false;
-        return price.equals(vehicle.price);
+        if (!price.equals(vehicle.price)) return false;
+        return type == vehicle.type;
     }
 
     @Override
     public int hashCode() {
         int result = id.hashCode();
-        result = 31 * result + model.hashCode();
+        result = 31 * result + model;
         result = 31 * result + price.hashCode();
+        result = 31 * result + type.hashCode();
         return result;
     }
 }

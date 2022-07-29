@@ -23,17 +23,17 @@ class MotorcycleServiceTest {
     @BeforeEach
     void setUp() {
         motorcyclesRepository = Mockito.mock(MotorcyclesRepository.class);
-        target = new MotorcycleService(motorcyclesRepository);
+        target = MotorcycleService.getInstance();
     }
 
     private Motorcycle createSimpleMotorcycle() {
-        return new Motorcycle("101",
+        return new Motorcycle(101,
                 MotorcycleManufacturer.KAWASAKI, new BigDecimal("8000"), MotorcycleBodyType.MOTOCROSS);
     }
 
     @Test
     void createMotorcycle_positive() {
-        final List<Motorcycle> actual = List.of(target.createAndSaveMotorcycle("101",
+        final List<Motorcycle> actual = List.of(target.createAndSaveMotorcycle(101,
                 MotorcycleManufacturer.KAWASAKI, "8000", MotorcycleBodyType.MOTOCROSS));
         assertEquals(1, actual.size());
         Mockito.verify(motorcyclesRepository).save(actual.get(0));
@@ -53,7 +53,7 @@ class MotorcycleServiceTest {
     void changeMotorcycle_fail() {
         Motorcycle motorcycle = createSimpleMotorcycle();
         Mockito.when(motorcyclesRepository.update(motorcycle)).thenCallRealMethod();
-        final boolean expected = target.changeMotorcycle(motorcycle, "107",
+        final boolean expected = target.changeMotorcycle(motorcycle, 107,
                 MotorcycleManufacturer.KAWASAKI, "8000", MotorcycleBodyType.MOTOCROSS);
         assertFalse(expected);
     }
@@ -61,14 +61,14 @@ class MotorcycleServiceTest {
     @Test
     void changeMotorcycle_success() {
         ArgumentCaptor<Motorcycle> captor = ArgumentCaptor.forClass(Motorcycle.class);
-        Motorcycle motorcycle = target.createAndSaveMotorcycle("101",
+        Motorcycle motorcycle = target.createAndSaveMotorcycle(101,
                 MotorcycleManufacturer.KAWASAKI, "8000", MotorcycleBodyType.MOTOCROSS);
         Mockito.when(motorcyclesRepository.update(motorcycle)).thenReturn(true);
-        boolean expected = target.changeMotorcycle(motorcycle, "107",
+        boolean expected = target.changeMotorcycle(motorcycle, 107,
                 MotorcycleManufacturer.KAWASAKI, "8000", MotorcycleBodyType.MOTOCROSS);
         Mockito.verify(motorcyclesRepository).update(captor.capture());
         assertTrue(expected);
-        assertEquals("107", motorcycle.getModel());
+        assertEquals(107, motorcycle.getModel());
         assertEquals(motorcycle, captor.getValue());
     }
 }

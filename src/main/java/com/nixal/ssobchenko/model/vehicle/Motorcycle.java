@@ -11,8 +11,8 @@ public class Motorcycle extends Vehicle {
     private MotorcycleBodyType bodyType;
     private MotorcycleManufacturer motorcycleManufacturer;
 
-    public Motorcycle(String model, MotorcycleManufacturer motorcycleManufacturer, BigDecimal price, MotorcycleBodyType bodyType) {
-        super(model, price);
+    public Motorcycle(int model, MotorcycleManufacturer motorcycleManufacturer, BigDecimal price, MotorcycleBodyType bodyType) {
+        super(model, price, VehicleType.MOTORCYCLE);
         this.bodyType = bodyType;
         this.motorcycleManufacturer = motorcycleManufacturer;
     }

@@ -2,6 +2,7 @@ package com.nixal.ssobchenko.repository;
 
 import com.nixal.ssobchenko.model.vehicle.Bus;
 import com.nixal.ssobchenko.model.vehicle.BusManufacturer;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,13 +20,18 @@ class BusesRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        target = new BusesRepository();
+        target = BusesRepository.getInstance();
         bus = createSimpleBus();
         target.save(bus);
     }
 
+    @AfterEach
+    void tearDown() {
+        target.deleteAll();
+    }
+
     private Bus createSimpleBus() {
-        return new Bus("686", BusManufacturer.MERCEDES, BigDecimal.ZERO, 50);
+        return new Bus(686, BusManufacturer.MERCEDES, BigDecimal.ZERO, 50);
     }
 
     @Test

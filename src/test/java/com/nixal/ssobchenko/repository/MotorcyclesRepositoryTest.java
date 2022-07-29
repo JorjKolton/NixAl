@@ -3,6 +3,7 @@ package com.nixal.ssobchenko.repository;
 import com.nixal.ssobchenko.model.vehicle.Motorcycle;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleBodyType;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleManufacturer;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,13 +21,25 @@ class MotorcyclesRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        target = new MotorcyclesRepository();
+        target = MotorcyclesRepository.getInstance();
         motorcycle = createSimpleMotorcycle();
         target.save(motorcycle);
     }
 
+    @AfterEach
+    void tearDown() {
+        target.deleteAll();
+    }
+
     private Motorcycle createSimpleMotorcycle() {
-        return new Motorcycle("686", MotorcycleManufacturer.KAWASAKI, BigDecimal.ZERO, MotorcycleBodyType.MOTOCROSS);
+        return new Motorcycle(686, MotorcycleManufacturer.KAWASAKI, BigDecimal.ZERO, MotorcycleBodyType.MOTOCROSS);
+    }
+
+    @Test
+    void getAll() {
+        final List<Motorcycle> actual = target.getAll();
+        assertNotNull(actual);
+        assertEquals(1, actual.size());
     }
 
     @Test
@@ -50,13 +63,6 @@ class MotorcyclesRepositoryTest {
         assertTrue(actual.isPresent());
         assertEquals(motorcycle.getId(), actual.get().getId());
         assertNotEquals(otherMotorcycle.getId(), actual.get().getId());
-    }
-
-    @Test
-    void getAll() {
-        final List<Motorcycle> actual = target.getAll();
-        assertNotNull(actual);
-        assertEquals(1, actual.size());
     }
 
     @Test

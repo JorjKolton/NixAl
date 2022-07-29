@@ -3,18 +3,26 @@ package com.nixal.ssobchenko.service;
 import com.nixal.ssobchenko.model.vehicle.Car;
 import com.nixal.ssobchenko.model.vehicle.CarBodyType;
 import com.nixal.ssobchenko.model.vehicle.CarManufacturer;
-import com.nixal.ssobchenko.repository.CrudRepository;
+import com.nixal.ssobchenko.repository.CarsRepository;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
 public class CarService extends VehicleService<Car> {
+    private static CarService instance;
 
-    public CarService(CrudRepository<Car> repository) {
+    private CarService(CarsRepository repository) {
         super(repository);
     }
 
-    public Car createAndSaveCar(String model, CarManufacturer carManufacturer, String price, CarBodyType carBodyType) {
+    public static CarService getInstance() {
+        if (instance == null) {
+            instance = new CarService(CarsRepository.getInstance());
+        }
+        return instance;
+    }
+
+    public Car createAndSaveCar(int model, CarManufacturer carManufacturer, String price, CarBodyType carBodyType) {
         final Car car = new Car(model, carManufacturer, new BigDecimal(price), carBodyType);
         LOGGER.debug("Created car {}", car.getId());
         repository.save(car);
@@ -24,7 +32,7 @@ public class CarService extends VehicleService<Car> {
     @Override
     protected Car create() {
         return new Car(
-                "" + RANDOM.nextInt(1000),
+                RANDOM.nextInt(1000),
                 getRandomManufacturer(),
                 BigDecimal.valueOf(RANDOM.nextInt(900000)),
                 getRandomBodyType()
@@ -43,7 +51,7 @@ public class CarService extends VehicleService<Car> {
         return values[index];
     }
 
-    public boolean changeCar(Car car, String model, CarManufacturer carManufacturer, String price, CarBodyType carBodyType) {
+    public boolean changeCar(Car car, int model, CarManufacturer carManufacturer, String price, CarBodyType carBodyType) {
         car.setModel(model);
         car.setCarManufacturer(carManufacturer);
         car.setPrice(new BigDecimal(price));

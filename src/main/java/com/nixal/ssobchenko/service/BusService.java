@@ -2,17 +2,25 @@ package com.nixal.ssobchenko.service;
 
 import com.nixal.ssobchenko.model.vehicle.Bus;
 import com.nixal.ssobchenko.model.vehicle.BusManufacturer;
-import com.nixal.ssobchenko.repository.CrudRepository;
+import com.nixal.ssobchenko.repository.BusesRepository;
 
 import java.math.BigDecimal;
 
 public class BusService extends VehicleService<Bus>{
+    private static BusService instance;
 
-    public BusService(CrudRepository<Bus> repository) {
+    private BusService(BusesRepository repository) {
         super(repository);
     }
 
-    public Bus createAndSaveBus(String model, BusManufacturer busManufacturer, String price, int numberOfSeats) {
+    public static BusService getInstance() {
+        if (instance == null) {
+            instance = new BusService(BusesRepository.getInstance());
+        }
+        return instance;
+    }
+
+    public Bus createAndSaveBus(int model, BusManufacturer busManufacturer, String price, int numberOfSeats) {
         final Bus bus = new Bus(model, busManufacturer, new BigDecimal(price), numberOfSeats);
         LOGGER.debug("Created bus {}", bus.getId());
         repository.save(bus);
@@ -22,14 +30,14 @@ public class BusService extends VehicleService<Bus>{
     @Override
     protected Bus create() {
         return new Bus(
-                "" + RANDOM.nextInt(1000),
+                RANDOM.nextInt(1000),
                 getRandomManufacturer(),
                 BigDecimal.valueOf(RANDOM.nextInt(900000)),
                 getRandomNumberOfSeats()
         );
     }
 
-    public boolean changeBus(Bus bus, String model, BusManufacturer busManufacturer, String price, int numberOfSeats) {
+    public boolean changeBus(Bus bus, int model, BusManufacturer busManufacturer, String price, int numberOfSeats) {
         bus.setModel(model);
         bus.setBusManufacturer(busManufacturer);
         bus.setPrice(new BigDecimal(price));
