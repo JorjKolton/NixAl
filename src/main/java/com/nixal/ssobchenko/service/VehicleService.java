@@ -31,6 +31,10 @@ public abstract class VehicleService<T extends Vehicle> {
 
     protected abstract T create();
 
+    public List<T> getAll() {
+        return repository.getAll();
+    }
+
     public boolean delete(T vehicle) {
         if (repository.delete(vehicle.getId())) {
             LOGGER.debug("Deleted vehicle {}", vehicle.getId());
@@ -39,6 +43,10 @@ public abstract class VehicleService<T extends Vehicle> {
             LOGGER.debug("Vehicle wasn't deleted {}", vehicle.getId());
             return false;
         }
+    }
+
+    public void deleteAll() {
+        repository.deleteAll();
     }
 
     public void print(T vehicle, String name) {

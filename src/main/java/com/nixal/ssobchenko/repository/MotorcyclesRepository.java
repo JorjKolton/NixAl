@@ -11,8 +11,17 @@ import java.util.Optional;
 public class MotorcyclesRepository implements CrudRepository<Motorcycle> {
     private final List<Motorcycle> motorcycles;
 
-    public MotorcyclesRepository() {
+    private static MotorcyclesRepository instance;
+
+    private MotorcyclesRepository() {
         motorcycles = new LinkedList<>();
+    }
+
+    public static MotorcyclesRepository getInstance() {
+        if (instance == null) {
+            instance = new MotorcyclesRepository();
+        }
+        return instance;
     }
 
     @Override
@@ -71,6 +80,11 @@ public class MotorcyclesRepository implements CrudRepository<Motorcycle> {
             }
         }
         return false;
+    }
+
+    @Override
+    public void deleteAll() {
+        motorcycles.clear();
     }
 
     private static class MotorcyclesCopy {

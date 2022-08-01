@@ -21,17 +21,17 @@ class BusServiceTest {
     @BeforeEach
     void setUp() {
         busesRepository = Mockito.mock(BusesRepository.class);
-        target = new BusService(busesRepository);
+        target = BusService.getInstance();
     }
 
     private Bus createSimpleBus() {
-        return new Bus("890", BusManufacturer.SCANIA, new BigDecimal("150000"), 52);
+        return new Bus(890, BusManufacturer.SCANIA, new BigDecimal("150000"), 52);
     }
 
     @Test
     void createBus_positive() {
         final List<Bus> actual = List
-                .of(target.createAndSaveBus("318", BusManufacturer.TOYOTA, "183000", 43));
+                .of(target.createAndSaveBus(318, BusManufacturer.TOYOTA, "183000", 43));
         assertEquals(1, actual.size());
         Mockito.verify(busesRepository).save(actual.get(0));
     }
@@ -50,19 +50,19 @@ class BusServiceTest {
     void changeBus_fail() {
         Bus bus = createSimpleBus();
         Mockito.when(busesRepository.update(bus)).thenCallRealMethod();
-        final boolean expected = target.changeBus(bus, "890", BusManufacturer.SCANIA, "150000", 52);
+        final boolean expected = target.changeBus(bus, 890, BusManufacturer.SCANIA, "150000", 52);
         assertFalse(expected);
     }
 
     @Test
     void changeBus_success() {
         ArgumentCaptor<Bus> captor = ArgumentCaptor.forClass(Bus.class);
-        Bus bus = target.createAndSaveBus("318", BusManufacturer.TOYOTA, "183000", 43);
+        Bus bus = target.createAndSaveBus(318, BusManufacturer.TOYOTA, "183000", 43);
         Mockito.when(busesRepository.update(bus)).thenReturn(true);
-        boolean expected = target.changeBus(bus, "324", BusManufacturer.TOYOTA, "183000", 43);
+        boolean expected = target.changeBus(bus, 324, BusManufacturer.TOYOTA, "183000", 43);
         Mockito.verify(busesRepository).update(captor.capture());
         assertTrue(expected);
-        assertEquals("324", bus.getModel());
+        assertEquals(324, bus.getModel());
         assertEquals(bus, captor.getValue());
     }
 }

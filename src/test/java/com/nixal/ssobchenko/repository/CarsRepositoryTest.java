@@ -3,6 +3,7 @@ package com.nixal.ssobchenko.repository;
 import com.nixal.ssobchenko.model.vehicle.Car;
 import com.nixal.ssobchenko.model.vehicle.CarBodyType;
 import com.nixal.ssobchenko.model.vehicle.CarManufacturer;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,13 +21,18 @@ class CarsRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        target = new CarsRepository();
+        target = CarsRepository.getInstance();
         car = createSimpleCar();
         target.save(car);
     }
 
+    @AfterEach
+    void tearDown() {
+        target.deleteAll();
+    }
+
     private Car createSimpleCar() {
-        return new Car("686", CarManufacturer.FORD, BigDecimal.ZERO, CarBodyType.SPORT_CAR);
+        return new Car(686, CarManufacturer.FORD, BigDecimal.ZERO, CarBodyType.SPORT_CAR);
     }
 
     @Test

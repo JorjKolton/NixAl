@@ -11,8 +11,17 @@ import java.util.Optional;
 public class CarsRepository implements CrudRepository<Car> {
     private final List<Car> cars;
 
-    public CarsRepository() {
+    private static CarsRepository instance;
+
+    private CarsRepository() {
         cars = new LinkedList<>();
+    }
+
+    public static CarsRepository getInstance() {
+        if (instance == null) {
+            instance = new CarsRepository();
+        }
+        return instance;
     }
 
     @Override
@@ -71,6 +80,11 @@ public class CarsRepository implements CrudRepository<Car> {
             }
         }
         return false;
+    }
+
+    @Override
+    public void deleteAll() {
+        cars.clear();
     }
 
     private static class CarsCopy {

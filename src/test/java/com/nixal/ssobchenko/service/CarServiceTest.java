@@ -23,17 +23,17 @@ class CarServiceTest {
     @BeforeEach
     void setUp() {
         carsRepository = Mockito.mock(CarsRepository.class);
-        target = new CarService(carsRepository);
+        target = CarService.getInstance();
     }
 
     private Car createSimpleCar() {
-        return new Car("700", CarManufacturer.BMW, new BigDecimal("35000"), CarBodyType.CABRIOLET);
+        return new Car(700, CarManufacturer.BMW, new BigDecimal("35000"), CarBodyType.CABRIOLET);
     }
 
     @Test
     void createCar_positive() {
         final List<Car> actual = List
-                .of(target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET));
+                .of(target.createAndSaveCar(700, CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET));
         assertEquals(1, actual.size());
         Mockito.verify(carsRepository).save(actual.get(0));
     }
@@ -50,7 +50,7 @@ class CarServiceTest {
 
     @Test
     void getOrCreateCar_get() {
-        final Car actual = target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
+        final Car actual = target.createAndSaveCar(700, CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
         Mockito.when(carsRepository.findById(actual.getId())).thenReturn(Optional.of(actual));
         Optional<Car> optionalCar = Optional.of(target.getOrCreateCar(actual.getId()));
         assertEquals(actual, optionalCar.get());
@@ -66,7 +66,7 @@ class CarServiceTest {
 
     @Test
     void getPriceForCarIfItLessThan_success() {
-        final Car actual = target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
+        final Car actual = target.createAndSaveCar(700, CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
         Mockito.when(carsRepository.findById(actual.getId())).thenReturn(Optional.of(actual));
         final BigDecimal price = target.getPriceForCarIfItLessThan(actual.getId(), "50000");
         final boolean expected = price.compareTo(new BigDecimal("50000")) < 0;
@@ -75,7 +75,7 @@ class CarServiceTest {
 
     @Test
     void getPriceForCarIfItLessThan_fail() {
-        final Car actual = target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
+        final Car actual = target.createAndSaveCar(700, CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
         final BigDecimal price = target.getPriceForCarIfItLessThan(actual.getId(), "34000");
         Mockito.verify(carsRepository).findById(actual.getId());
         assertEquals(BigDecimal.ZERO, price);
@@ -83,7 +83,7 @@ class CarServiceTest {
 
     @Test
     void getCarForId_success() {
-        final Car actual = target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
+        final Car actual = target.createAndSaveCar(700, CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
         Mockito.when(carsRepository.findById(actual.getId())).thenReturn(Optional.of(actual));
         Optional<Car> optionalCar = Optional.of(target.getCarForId(actual.getId()));
         assertEquals(actual, optionalCar.get());
@@ -100,25 +100,25 @@ class CarServiceTest {
     void changeCar_fail() {
         Car car = createSimpleCar();
         Mockito.when(carsRepository.update(car)).thenCallRealMethod();
-        final boolean expected = target.changeCar(car, "657", CarManufacturer.AUDI, "45400", CarBodyType.COUPE);
+        final boolean expected = target.changeCar(car, 657, CarManufacturer.AUDI, "45400", CarBodyType.COUPE);
         assertFalse(expected);
     }
 
     @Test
     void changeCar_success() {
         ArgumentCaptor<Car> captor = ArgumentCaptor.forClass(Car.class);
-        Car car = target.createAndSaveCar("700", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
+        Car car = target.createAndSaveCar(700, CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
         Mockito.when(carsRepository.update(car)).thenReturn(true);
-        boolean expected = target.changeCar(car, "657", CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
+        boolean expected = target.changeCar(car, 657, CarManufacturer.BMW, "35000", CarBodyType.CABRIOLET);
         Mockito.verify(carsRepository).update(captor.capture());
         assertTrue(expected);
-        assertEquals("657", car.getModel());
+        assertEquals(657, car.getModel());
         assertEquals(car, captor.getValue());
     }
 
     @Test
     void getCarWithManufacturer() {
-        final Car car = target.createAndSaveCar("700", CarManufacturer.AUDI, "35000", CarBodyType.CABRIOLET);
+        final Car car = target.createAndSaveCar(700, CarManufacturer.AUDI, "35000", CarBodyType.CABRIOLET);
         final CarManufacturer carManufacturer = CarManufacturer.AUDI;
         Mockito.when(carsRepository.findById(car.getId())).thenReturn(Optional.of(car));
         final Car actual = target.getCarWithManufacturer(car.getId(), carManufacturer);

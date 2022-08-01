@@ -11,8 +11,8 @@ public class Car extends Vehicle {
     private CarBodyType bodyType;
     private CarManufacturer carManufacturer;
 
-    public Car(String model, CarManufacturer carManufacturer, BigDecimal price, CarBodyType bodyType) {
-        super(model, price);
+    public Car(int model, CarManufacturer carManufacturer, BigDecimal price, CarBodyType bodyType) {
+        super(model, price, VehicleType.CAR);
         this.bodyType = bodyType;
         this.carManufacturer = carManufacturer;
     }

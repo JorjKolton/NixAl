@@ -21,7 +21,7 @@ class DiscountServiceTest {
     }
 
     public Car createSimpleCar() {
-        return new Car("700", CarManufacturer.BMW, new BigDecimal("35000"), CarBodyType.CABRIOLET);
+        return new Car(700, CarManufacturer.BMW, new BigDecimal("35000"), CarBodyType.CABRIOLET);
     }
 
     @Test

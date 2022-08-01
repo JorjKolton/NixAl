@@ -12,8 +12,8 @@ public class Bus extends Vehicle {
     private int numberOfSeats;
     private BusManufacturer busManufacturer;
 
-    public Bus(String model, BusManufacturer busManufacturer, BigDecimal price, int numberOfSeats) {
-        super(model, price);
+    public Bus(int model, BusManufacturer busManufacturer, BigDecimal price, int numberOfSeats) {
+        super(model, price, VehicleType.BUS);
         this.numberOfSeats = numberOfSeats;
         this.busManufacturer = busManufacturer;
     }

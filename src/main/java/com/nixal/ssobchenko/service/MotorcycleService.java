@@ -3,17 +3,25 @@ package com.nixal.ssobchenko.service;
 import com.nixal.ssobchenko.model.vehicle.Motorcycle;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleBodyType;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleManufacturer;
-import com.nixal.ssobchenko.repository.CrudRepository;
+import com.nixal.ssobchenko.repository.MotorcyclesRepository;
 
 import java.math.BigDecimal;
 
 public class MotorcycleService extends VehicleService<Motorcycle> {
+    private static MotorcycleService instance;
 
-    public MotorcycleService(CrudRepository<Motorcycle> repository) {
+    private MotorcycleService(MotorcyclesRepository repository) {
         super(repository);
     }
 
-    public Motorcycle createAndSaveMotorcycle(String model, MotorcycleManufacturer motorcycleManufacturer, String price,
+    public static MotorcycleService getInstance() {
+        if (instance == null) {
+            instance = new MotorcycleService(MotorcyclesRepository.getInstance());
+        }
+        return instance;
+    }
+
+    public Motorcycle createAndSaveMotorcycle(int model, MotorcycleManufacturer motorcycleManufacturer, String price,
                                               MotorcycleBodyType bodyType) {
         final Motorcycle motorcycle = new Motorcycle(model, motorcycleManufacturer, new BigDecimal(price), bodyType);
         LOGGER.debug("Created motorcycle {}", motorcycle.getId());
@@ -24,7 +32,7 @@ public class MotorcycleService extends VehicleService<Motorcycle> {
     @Override
     protected Motorcycle create() {
         return new Motorcycle(
-                "" + RANDOM.nextInt(1000),
+                RANDOM.nextInt(1000),
                 getRandomManufacturer(),
                 BigDecimal.valueOf(RANDOM.nextInt(100000)),
                 getRandomBodyType()
@@ -43,7 +51,7 @@ public class MotorcycleService extends VehicleService<Motorcycle> {
         return values[index];
     }
 
-    public boolean changeMotorcycle(Motorcycle motorcycle, String model, MotorcycleManufacturer manufacturer, String price,
+    public boolean changeMotorcycle(Motorcycle motorcycle, int model, MotorcycleManufacturer manufacturer, String price,
                                  MotorcycleBodyType bodyType) {
         motorcycle.setModel(model);
         motorcycle.setMotorcycleManufacturer(manufacturer);
