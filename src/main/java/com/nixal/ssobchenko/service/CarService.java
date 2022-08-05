@@ -1,12 +1,14 @@
 package com.nixal.ssobchenko.service;
 
-import com.nixal.ssobchenko.model.vehicle.Car;
-import com.nixal.ssobchenko.model.vehicle.CarBodyType;
-import com.nixal.ssobchenko.model.vehicle.CarManufacturer;
+import com.nixal.ssobchenko.model.vehicle.*;
 import com.nixal.ssobchenko.repository.CarsRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class CarService extends VehicleService<Car> {
     private static CarService instance;
@@ -88,4 +90,19 @@ public class CarService extends VehicleService<Car> {
         }
         return optionalCar.get();
     }
+
+    public final Function<Map<String, String>, Car> getCarFromString =
+            map -> {
+                Car car = new Car(
+                        Integer.parseInt(map.get("model")),
+                        CarManufacturer.valueOf(map.get("manufacturer").toUpperCase()),
+                        new BigDecimal(map.get("price")),
+                        CarBodyType.valueOf(map.get("bodyType").toUpperCase())
+                );
+                car.setCreated(LocalDateTime.parse(map.get("created"),
+                        DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ssX")));
+                car.getEngine().setVolume(Integer.parseInt(map.get("volume")));
+                car.getEngine().setBrand(map.get("brand"));
+                return car;
+            };
 }

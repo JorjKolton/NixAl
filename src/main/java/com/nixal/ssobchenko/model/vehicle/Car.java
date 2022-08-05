@@ -22,6 +22,6 @@ public class Car extends Vehicle {
         return "Car {" + bodyType + " from " +
                 carManufacturer + ", id = '" + id + '\'' +
                 ", model = '" + model + '\'' +
-                ", price = " + price + "$" + '}';
+                ", price = " + price + currency + '}';
     }
 }

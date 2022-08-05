@@ -1,0 +1,15 @@
+[
+  {
+    "model": "767",
+    "manufacturer": "BMW",
+    "price": "1500",
+    "currency": "$",
+    "bodyType": "Coupe",
+    "created": "2022-07-25T18:58:23Z",
+    "count": "15",
+    "engine": {
+      "volume": "2",
+      "brand": "Brand"
+    }
+  }
+]

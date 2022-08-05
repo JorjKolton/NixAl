@@ -32,7 +32,7 @@ public class Bus extends Vehicle {
                 numberOfSeats + " seats" +
                 ", id ='" + id + '\'' +
                 ", model ='" + model + '\'' +
-                ", price = " + price + "$" +
+                ", price = " + price + currency +
                 '}';
     }
 }
