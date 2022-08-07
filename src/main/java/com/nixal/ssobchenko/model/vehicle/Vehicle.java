@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -16,12 +17,19 @@ public abstract class Vehicle {
     protected BigDecimal price;
     protected VehicleType type;
     protected List<String> details;
+    protected String currency;
+    protected int count;
+    protected LocalDateTime created;
+    protected Engine engine;
 
     protected Vehicle(int model, BigDecimal price, VehicleType type) {
         this.id = UUID.randomUUID().toString();
         this.model = model;
         this.price = price;
         this.type = type;
+        currency = "₴";
+        created = LocalDateTime.now();
+        engine = new Engine();
     }
 
     public static class IdComparator implements Comparator<Vehicle> {
