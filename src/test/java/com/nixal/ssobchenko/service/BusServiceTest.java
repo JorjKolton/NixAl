@@ -25,7 +25,9 @@ class BusServiceTest {
     }
 
     private Bus createSimpleBus() {
-        return new Bus(890, BusManufacturer.SCANIA, new BigDecimal("150000"), 52);
+        return new Bus.Builder(890, BusManufacturer.SCANIA, new BigDecimal("150000"))
+                .setNumberOfSeats(52)
+                .build();
     }
 
     @Test

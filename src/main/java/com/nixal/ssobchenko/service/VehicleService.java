@@ -108,19 +108,19 @@ public abstract class VehicleService<T extends Vehicle> {
             map -> {
                 Vehicle vehicle;
                 if (map.containsValue(VehicleType.CAR)) {
-                    vehicle = new Car(
+                    vehicle = new Car.Builder(
                             (Integer) map.get(MODEL),
                             (CarManufacturer) map.get(MANUFACTURER),
-                            (BigDecimal) map.get(PRICE),
-                            (CarBodyType) map.get("BodyType")
-                    );
+                            (BigDecimal) map.get(PRICE))
+                            .setCarBodyType((CarBodyType) map.get("BodyType"))
+                            .build();
                 } else if (map.containsValue(VehicleType.BUS)) {
-                    vehicle = new Bus(
+                    vehicle = new Bus.Builder(
                             (Integer) map.get(MODEL),
                             (BusManufacturer) map.get(MANUFACTURER),
-                            (BigDecimal) map.get(PRICE),
-                            (Integer) map.get("Seats")
-                    );
+                            (BigDecimal) map.get(PRICE))
+                            .setNumberOfSeats((Integer) map.get("Seats"))
+                            .build();
                 } else {
                     vehicle = new Motorcycle(
                             (Integer) map.get(MODEL),

@@ -31,7 +31,9 @@ class BusesRepositoryTest {
     }
 
     private Bus createSimpleBus() {
-        return new Bus(686, BusManufacturer.MERCEDES, BigDecimal.ZERO, 50);
+        return new Bus.Builder(686, BusManufacturer.MERCEDES, BigDecimal.ZERO)
+                .setNumberOfSeats(50)
+                .build();
     }
 
     @Test

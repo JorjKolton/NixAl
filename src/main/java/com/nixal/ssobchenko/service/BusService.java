@@ -21,7 +21,9 @@ public class BusService extends VehicleService<Bus>{
     }
 
     public Bus createAndSaveBus(int model, BusManufacturer busManufacturer, String price, int numberOfSeats) {
-        final Bus bus = new Bus(model, busManufacturer, new BigDecimal(price), numberOfSeats);
+        final Bus bus = new Bus.Builder(model, busManufacturer, new BigDecimal(price))
+                .setNumberOfSeats(numberOfSeats)
+                .build();
         LOGGER.debug("Created bus {}", bus.getId());
         repository.save(bus);
         return bus;
@@ -29,12 +31,12 @@ public class BusService extends VehicleService<Bus>{
 
     @Override
     protected Bus create() {
-        return new Bus(
+        return new Bus.Builder(
                 RANDOM.nextInt(1000),
                 getRandomManufacturer(),
-                BigDecimal.valueOf(RANDOM.nextInt(900000)),
-                getRandomNumberOfSeats()
-        );
+                BigDecimal.valueOf(RANDOM.nextInt(900000)))
+                .setNumberOfSeats(getRandomNumberOfSeats())
+                .build();
     }
 
     public boolean changeBus(Bus bus, int model, BusManufacturer busManufacturer, String price, int numberOfSeats) {

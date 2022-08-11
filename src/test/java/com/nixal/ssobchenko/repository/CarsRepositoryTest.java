@@ -32,7 +32,9 @@ class CarsRepositoryTest {
     }
 
     private Car createSimpleCar() {
-        return new Car(686, CarManufacturer.FORD, BigDecimal.ZERO, CarBodyType.SPORT_CAR);
+        return new Car.Builder(686, CarManufacturer.FORD, BigDecimal.ZERO)
+                .setCarBodyType(CarBodyType.SPORT_CAR)
+                .build();
     }
 
     @Test

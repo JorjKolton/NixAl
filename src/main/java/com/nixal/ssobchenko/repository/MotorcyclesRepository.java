@@ -26,12 +26,9 @@ public class MotorcyclesRepository implements CrudRepository<Motorcycle> {
 
     @Override
     public Optional<Motorcycle> findById(String id) {
-        for (Motorcycle motorcycle : motorcycles) {
-            if (motorcycle.getId().equals(id)) {
-                return Optional.of(motorcycle);
-            }
-        }
-        return Optional.empty();
+        return motorcycles.stream()
+                .filter(motorcycle -> motorcycle.getId().equals(id))
+                .findAny();
     }
 
     @Override
