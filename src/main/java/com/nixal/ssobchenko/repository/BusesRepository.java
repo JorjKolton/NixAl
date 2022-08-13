@@ -26,12 +26,9 @@ public class BusesRepository implements CrudRepository<Bus> {
 
     @Override
     public Optional<Bus> findById(String id) {
-        for (Bus bus : buses) {
-            if (bus.getId().equals(id)) {
-                return Optional.of(bus);
-            }
-        }
-        return Optional.empty();
+        return buses.stream()
+                .filter(bus -> bus.getId().equals(id))
+                .findAny();
     }
 
     @Override

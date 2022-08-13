@@ -25,7 +25,9 @@ class VehicleServiceTest {
     }
 
     private Car createSimpleCar() {
-        return new Car(700, CarManufacturer.BMW, new BigDecimal("35000"), CarBodyType.CABRIOLET);
+        return new Car.Builder(700, CarManufacturer.BMW, new BigDecimal("35000"))
+                .setCarBodyType(CarBodyType.CABRIOLET)
+                .build();
     }
 
     @Test

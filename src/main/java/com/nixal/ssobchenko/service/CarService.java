@@ -25,7 +25,9 @@ public class CarService extends VehicleService<Car> {
     }
 
     public Car createAndSaveCar(int model, CarManufacturer carManufacturer, String price, CarBodyType carBodyType) {
-        final Car car = new Car(model, carManufacturer, new BigDecimal(price), carBodyType);
+        final Car car = new Car.Builder(model, carManufacturer, new BigDecimal(price))
+                .setCarBodyType(carBodyType)
+                .build();
         LOGGER.debug("Created car {}", car.getId());
         repository.save(car);
         return car;
@@ -33,12 +35,12 @@ public class CarService extends VehicleService<Car> {
 
     @Override
     protected Car create() {
-        return new Car(
+        return new Car.Builder(
                 RANDOM.nextInt(1000),
                 getRandomManufacturer(),
-                BigDecimal.valueOf(RANDOM.nextInt(900000)),
-                getRandomBodyType()
-        );
+                BigDecimal.valueOf(RANDOM.nextInt(900000)))
+                .setCarBodyType(getRandomBodyType())
+                .build();
     }
 
     private CarManufacturer getRandomManufacturer() {
@@ -93,12 +95,12 @@ public class CarService extends VehicleService<Car> {
 
     public final Function<Map<String, String>, Car> getCarFromString =
             map -> {
-                Car car = new Car(
+                Car car = new Car.Builder(
                         Integer.parseInt(map.get("model")),
                         CarManufacturer.valueOf(map.get("manufacturer").toUpperCase()),
-                        new BigDecimal(map.get("price")),
-                        CarBodyType.valueOf(map.get("bodyType").toUpperCase())
-                );
+                        new BigDecimal(map.get("price")))
+                        .setCarBodyType(CarBodyType.valueOf(map.get("bodyType").toUpperCase()))
+                        .build();
                 car.setCreated(LocalDateTime.parse(map.get("created"),
                         DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ssX")));
                 car.getEngine().setVolume(Integer.parseInt(map.get("volume")));
