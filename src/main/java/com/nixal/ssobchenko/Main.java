@@ -1,18 +1,26 @@
 package com.nixal.ssobchenko;
 
-import com.nixal.ssobchenko.model.vehicle.Bus;
-import com.nixal.ssobchenko.model.vehicle.BusManufacturer;
+import com.nixal.ssobchenko.service.BusService;
+import com.nixal.ssobchenko.util.ApplicationContextImpl;
 
-import java.math.BigDecimal;
+import java.lang.reflect.Field;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Bus bus = new Bus.Builder(505, BusManufacturer.MERCEDES,new BigDecimal("27000"))
-                .setNumberOfSeats(24)
-                .setCount(5)
-                .build();
+    public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
+        final ApplicationContextImpl apl = new ApplicationContextImpl();
 
-        System.out.println(bus);
+        BusService bs = apl.getObject(BusService.class);
+        Field instance = bs.getClass().getDeclaredField("instance");
+        instance.setAccessible(true);
+        System.out.println(instance.get(bs).hashCode());
+        System.out.println(bs.hashCode());
+
+        BusService bs2 = apl.getObject(BusService.class);
+        Field instance1 = bs2.getClass().getDeclaredField("instance");
+        instance1.setAccessible(true);
+        System.out.println(instance1.get(bs).hashCode());
+        System.out.println(bs2.hashCode());
+
     }
 }

@@ -4,12 +4,15 @@ import com.nixal.ssobchenko.model.vehicle.Motorcycle;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleBodyType;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleManufacturer;
 import com.nixal.ssobchenko.repository.MotorcyclesRepository;
+import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;
 
+@ApplicationContext.Singleton
 public class MotorcycleService extends VehicleService<Motorcycle> {
     private static MotorcycleService instance;
 
+    @ApplicationContext.Autowired
     private MotorcycleService(MotorcyclesRepository repository) {
         super(repository);
     }

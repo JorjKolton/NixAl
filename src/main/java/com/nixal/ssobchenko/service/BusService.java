@@ -3,12 +3,15 @@ package com.nixal.ssobchenko.service;
 import com.nixal.ssobchenko.model.vehicle.Bus;
 import com.nixal.ssobchenko.model.vehicle.BusManufacturer;
 import com.nixal.ssobchenko.repository.BusesRepository;
+import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;
 
+@ApplicationContext.Singleton
 public class BusService extends VehicleService<Bus>{
     private static BusService instance;
 
+    @ApplicationContext.Autowired
     private BusService(BusesRepository repository) {
         super(repository);
     }
