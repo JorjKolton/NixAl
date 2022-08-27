@@ -1,6 +1,7 @@
 package com.nixal.ssobchenko.repository;
 
 import com.nixal.ssobchenko.model.vehicle.Motorcycle;
+import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
@@ -8,11 +9,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@ApplicationContext.Singleton
 public class MotorcyclesRepository implements CrudRepository<Motorcycle> {
     private final List<Motorcycle> motorcycles;
 
     private static MotorcyclesRepository instance;
 
+    @ApplicationContext.Autowired
     private MotorcyclesRepository() {
         motorcycles = new LinkedList<>();
     }

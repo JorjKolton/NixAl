@@ -1,6 +1,7 @@
 package com.nixal.ssobchenko.repository;
 
 import com.nixal.ssobchenko.model.vehicle.Bus;
+import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
@@ -8,11 +9,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@ApplicationContext.Singleton
 public class BusesRepository implements CrudRepository<Bus> {
     private final List<Bus> buses;
 
     private static BusesRepository instance;
 
+    @ApplicationContext.Autowired
     private BusesRepository() {
         buses = new LinkedList<>();
     }

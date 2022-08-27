@@ -1,7 +1,10 @@
 package com.nixal.ssobchenko.service;
 
-import com.nixal.ssobchenko.model.vehicle.*;
+import com.nixal.ssobchenko.model.vehicle.Car;
+import com.nixal.ssobchenko.model.vehicle.CarBodyType;
+import com.nixal.ssobchenko.model.vehicle.CarManufacturer;
 import com.nixal.ssobchenko.repository.CarsRepository;
+import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,9 +13,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+@ApplicationContext.Singleton
 public class CarService extends VehicleService<Car> {
     private static CarService instance;
 
+    @ApplicationContext.Autowired
     private CarService(CarsRepository repository) {
         super(repository);
     }
