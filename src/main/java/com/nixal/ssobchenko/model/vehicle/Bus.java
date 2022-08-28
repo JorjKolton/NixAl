@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,7 +17,7 @@ public class Bus extends Vehicle {
     private BusManufacturer busManufacturer;
 
     private Bus(Builder builder) {
-        super(builder.model, builder.price, VehicleType.BUS);
+        super(builder.id, builder.model, builder.price, VehicleType.BUS, builder.created);
         this.numberOfSeats = builder.numberOfSeats;
         this.busManufacturer = builder.busManufacturer;
         this.count = builder.count;
@@ -27,11 +29,25 @@ public class Bus extends Vehicle {
         private final BigDecimal price;
         private int numberOfSeats;
         private int count;
+        private String id;
+        private LocalDateTime created;
 
         public Builder(int model, BusManufacturer busManufacturer, BigDecimal price) {
             this.model = model;
             this.busManufacturer = busManufacturer;
             this.price = price;
+            id = UUID.randomUUID().toString();
+            created = LocalDateTime.now();
+        }
+
+        public Bus.Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Bus.Builder setCreated(LocalDateTime created) {
+            this.created = created;
+            return this;
         }
 
         public Builder setNumberOfSeats(int numberOfSeats) {

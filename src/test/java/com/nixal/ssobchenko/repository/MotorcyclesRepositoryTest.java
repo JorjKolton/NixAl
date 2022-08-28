@@ -12,7 +12,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MotorcyclesRepositoryTest {
 
@@ -32,7 +37,9 @@ class MotorcyclesRepositoryTest {
     }
 
     private Motorcycle createSimpleMotorcycle() {
-        return new Motorcycle(686, MotorcycleManufacturer.KAWASAKI, BigDecimal.ZERO, MotorcycleBodyType.MOTOCROSS);
+        return new Motorcycle.Builder(686, MotorcycleManufacturer.KAWASAKI, BigDecimal.ZERO)
+                .setMotorcycleBodyType(MotorcycleBodyType.MOTOCROSS)
+                .build();
     }
 
     @Test

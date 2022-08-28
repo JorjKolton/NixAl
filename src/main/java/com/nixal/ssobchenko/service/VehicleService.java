@@ -122,12 +122,12 @@ public abstract class VehicleService<T extends Vehicle> {
                             .setNumberOfSeats((Integer) map.get("Seats"))
                             .build();
                 } else {
-                    vehicle = new Motorcycle(
+                    vehicle = new Motorcycle.Builder(
                             (Integer) map.get(MODEL),
                             (MotorcycleManufacturer) map.get(MANUFACTURER),
-                            (BigDecimal) map.get(PRICE),
-                            (MotorcycleBodyType) map.get("BodyType")
-                    );
+                            (BigDecimal) map.get(PRICE))
+                            .setMotorcycleBodyType((MotorcycleBodyType) map.get("BodyType"))
+                            .build();
                 }
                 return vehicle;
             };
