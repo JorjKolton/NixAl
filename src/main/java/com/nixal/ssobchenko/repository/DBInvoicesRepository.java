@@ -12,7 +12,9 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class DBInvoicesRepository {
@@ -130,6 +132,21 @@ public class DBInvoicesRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Map<String, Integer> groupInvoicesBySum() {
+        final String sql = "SELECT price, COUNT(*) FROM Invoices GROUP BY price ORDER BY price DESC ";
+        final Map<String, Integer> result = new HashMap<>();
+        try (final Statement statement = connection.createStatement()) {
+            final ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                result.put(resultSet.getBigDecimal("price").toString(),
+                        Integer.parseInt(resultSet.getString("count")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
     private void saveVehicleFromInvoice(String sql, String invoiceID, Vehicle vehicle) {

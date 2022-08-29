@@ -6,6 +6,7 @@ import com.nixal.ssobchenko.repository.DBInvoicesRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class InvoiceService {
 
@@ -49,4 +50,9 @@ public class InvoiceService {
     public List<Invoice> getInvoicesWherePriceBiggerThan(int price) {
         return repository.getAllInvoicesWherePriceBiggerThan(price);
     }
-}
+
+    public Map<String, Integer> groupInvoicesBySum() {
+        return repository.groupInvoicesBySum();
+    }
+
+    }
