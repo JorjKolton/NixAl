@@ -43,7 +43,7 @@ public class CarService extends VehicleService<Car> {
         return new Car.Builder(
                 RANDOM.nextInt(1000),
                 getRandomManufacturer(),
-                BigDecimal.valueOf(RANDOM.nextInt(900000)))
+                BigDecimal.valueOf(RANDOM.nextInt(5000)))
                 .setCarBodyType(getRandomBodyType())
                 .build();
     }

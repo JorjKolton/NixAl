@@ -37,7 +37,7 @@ public class BusService extends VehicleService<Bus> {
         return new Bus.Builder(
                 RANDOM.nextInt(1000),
                 getRandomManufacturer(),
-                BigDecimal.valueOf(RANDOM.nextInt(900000)))
+                BigDecimal.valueOf(RANDOM.nextInt(10000)))
                 .setNumberOfSeats(getRandomNumberOfSeats())
                 .build();
     }

@@ -39,7 +39,7 @@ public class MotorcycleService extends VehicleService<Motorcycle> {
         return new Motorcycle.Builder(
                 RANDOM.nextInt(1000),
                 getRandomManufacturer(),
-                BigDecimal.valueOf(RANDOM.nextInt(100000)))
+                BigDecimal.valueOf(RANDOM.nextInt(1000)))
                 .setMotorcycleBodyType(getRandomBodyType())
                 .build();
     }

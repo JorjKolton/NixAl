@@ -7,7 +7,6 @@ import com.nixal.ssobchenko.service.CarService;
 import com.nixal.ssobchenko.service.InvoiceService;
 import com.nixal.ssobchenko.service.MotorcycleService;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +40,9 @@ public class Main {
         INVOICE_SERVICE.createAndSaveInvoice(vehicles3);
 
         System.out.println("Count of invoices = " + INVOICE_SERVICE.countOfInvoices());
-        INVOICE_SERVICE.updateInvoiceCreationTime("7f3752e9-3546-488f-9e45-0bc096b6683f", LocalDateTime.now());
+        System.out.println("All invoices = " + INVOICE_SERVICE.getAll().size());
+        System.out.println("Count of invoices where price bigger than 20000 = " +
+                INVOICE_SERVICE.getInvoicesWherePriceBiggerThan(20000).size());
+
     }
 }

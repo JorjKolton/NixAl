@@ -13,7 +13,7 @@ public abstract class SQLScript {
     private static final String CREATED = "created TIMESTAMP WITHOUT TIME ZONE NOT NULL, ";
     private static final String PRIMARY_KEY = "PRIMARY KEY (id)";
     private static final String INVOICE_ID = "invoice_id VARCHAR(50), ";
-    private static final String FOREIGN_KEY = "CONSTRAINT fk_invoices FOREIGN KEY (invoice_id) REFERENCES invoices(id), ";
+    private static final String FOREIGN_KEY = "CONSTRAINT fk_invoices FOREIGN KEY (invoice_id) REFERENCES invoices(invoice_id), ";
 
     public static void createAllTables() {
         createInvoicesTable();
@@ -24,7 +24,7 @@ public abstract class SQLScript {
 
     private static void createInvoicesTable() {
         final String sql = "CREATE TABLE IF NOT EXISTS public.Invoices (" +
-                ID + CREATED + PRIMARY_KEY + ")";
+                "invoice_id VARCHAR NOT NULL, " + CREATED + PRICE + "PRIMARY KEY (invoice_id))";
         try (final Statement statement = CONNECTION.createStatement()) {
             statement.executeUpdate(sql);
         } catch (SQLException e) {

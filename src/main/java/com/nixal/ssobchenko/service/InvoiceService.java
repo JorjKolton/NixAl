@@ -37,4 +37,16 @@ public class InvoiceService {
     public boolean updateInvoiceCreationTime(String id, LocalDateTime time) {
         return repository.updateInvoiceCreationTime(id, time);
     }
+
+    public Invoice getInvoiceForId(String id) {
+        return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Can't find invoice with id " + id));
+    }
+
+    public List<Invoice> getAll() {
+        return repository.getAll();
+    }
+
+    public List<Invoice> getInvoicesWherePriceBiggerThan(int price) {
+        return repository.getAllInvoicesWherePriceBiggerThan(price);
+    }
 }
