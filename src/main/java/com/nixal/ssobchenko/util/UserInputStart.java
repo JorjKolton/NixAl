@@ -5,18 +5,18 @@ import com.nixal.ssobchenko.command.Command;
 
 import java.util.List;
 
-public class UserInputStart {
-    final Action[] actions = Action.values();
-    final List<String> names = Action.getNames();
-    Command command;
+public abstract class UserInputStart {
+    private  static final Action[] actions = Action.values();
+    private static final List<String> names = Action.getNames();
+    static Command command;
 
-    public void start() {
+    public static void start() {
         do {
-            command = executeCommand(actions, names);
+            command = executeCommand();
         } while (command != null);
     }
 
-    private static Command executeCommand(Action[] actions, List<String> names) {
+    private static Command executeCommand() {
         int userInput = UserInputUtil.getUserInput("What you want:", names);
         final Action action = actions[userInput];
         return action.execute();

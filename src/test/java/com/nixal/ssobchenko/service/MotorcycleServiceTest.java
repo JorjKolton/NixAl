@@ -13,7 +13,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MotorcycleServiceTest {
 
@@ -27,8 +29,9 @@ class MotorcycleServiceTest {
     }
 
     private Motorcycle createSimpleMotorcycle() {
-        return new Motorcycle(101,
-                MotorcycleManufacturer.KAWASAKI, new BigDecimal("8000"), MotorcycleBodyType.MOTOCROSS);
+        return new Motorcycle.Builder(101, MotorcycleManufacturer.KAWASAKI, new BigDecimal("8000"))
+                .setMotorcycleBodyType(MotorcycleBodyType.MOTOCROSS)
+                .build();
     }
 
     @Test

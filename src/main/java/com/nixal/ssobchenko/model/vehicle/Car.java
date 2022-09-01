@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,7 +16,7 @@ public class Car extends Vehicle {
     private CarManufacturer carManufacturer;
 
     private Car(Builder builder) {
-        super(builder.model, builder.price, VehicleType.CAR);
+        super(builder.id, builder.model, builder.price, VehicleType.CAR, builder.created);
         this.bodyType = builder.bodyType;
         this.carManufacturer = builder.carManufacturer;
     }
@@ -25,11 +27,15 @@ public class Car extends Vehicle {
         private final BigDecimal price;
         private CarBodyType bodyType;
         private int count;
+        private String id;
+        private LocalDateTime created;
 
         public Builder(int model, CarManufacturer carManufacturer, BigDecimal price) {
             this.model = model;
             this.carManufacturer = carManufacturer;
             this.price = price;
+            id = UUID.randomUUID().toString();
+            created = LocalDateTime.now();
         }
 
         public Builder setCarBodyType(CarBodyType bodyType) {
@@ -37,6 +43,16 @@ public class Car extends Vehicle {
                 throw new IllegalArgumentException("BodyType can't be null or longer than 20 characters");
             }
             this.bodyType = bodyType;
+            return this;
+        }
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setCreated(LocalDateTime created) {
+            this.created = created;
             return this;
         }
 

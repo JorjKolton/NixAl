@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -22,13 +21,13 @@ public abstract class Vehicle {
     protected LocalDateTime created;
     protected Engine engine;
 
-    protected Vehicle(int model, BigDecimal price, VehicleType type) {
-        this.id = UUID.randomUUID().toString();
+    protected Vehicle(String id, int model, BigDecimal price, VehicleType type, LocalDateTime created) {
+        this.id = id;
         this.model = model;
         this.price = price;
         this.type = type;
         currency = "₴";
-        created = LocalDateTime.now();
+        this.created = created;
         engine = new Engine();
     }
 

@@ -3,7 +3,7 @@ package com.nixal.ssobchenko.service;
 import com.nixal.ssobchenko.model.vehicle.Car;
 import com.nixal.ssobchenko.model.vehicle.CarBodyType;
 import com.nixal.ssobchenko.model.vehicle.CarManufacturer;
-import com.nixal.ssobchenko.repository.CarsRepository;
+import com.nixal.ssobchenko.repository.DBCarsRepository;
 import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;
@@ -18,13 +18,13 @@ public class CarService extends VehicleService<Car> {
     private static CarService instance;
 
     @ApplicationContext.Autowired
-    private CarService(CarsRepository repository) {
+    private CarService(DBCarsRepository repository) {
         super(repository);
     }
 
     public static CarService getInstance() {
         if (instance == null) {
-            instance = new CarService(CarsRepository.getInstance());
+            instance = new CarService(DBCarsRepository.getInstance());
         }
         return instance;
     }
@@ -43,7 +43,7 @@ public class CarService extends VehicleService<Car> {
         return new Car.Builder(
                 RANDOM.nextInt(1000),
                 getRandomManufacturer(),
-                BigDecimal.valueOf(RANDOM.nextInt(900000)))
+                BigDecimal.valueOf(RANDOM.nextInt(5000)))
                 .setCarBodyType(getRandomBodyType())
                 .build();
     }
