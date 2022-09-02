@@ -15,7 +15,7 @@ public class Main {
     private static final MotorcycleService MOTORCYCLE_SERVICE = MotorcycleService.getInstance();
     private static final InvoiceService INVOICE_SERVICE = InvoiceService.getInstance();
 
-    public static <list> void main(String[] args) {
+    public static void main(String[] args) {
 //        UserInputStart.start();
 
         List<Vehicle> vehicles1 = new ArrayList<>();
@@ -41,7 +41,7 @@ public class Main {
         System.out.println("All invoices = " + INVOICE_SERVICE.getAll().size());
         System.out.println("Count of invoices where price bigger than 20000 = " +
                 INVOICE_SERVICE.getInvoicesWherePriceBiggerThan(20000).size());
-//        System.out.println(INVOICE_SERVICE.groupInvoicesBySum());
+        System.out.println(INVOICE_SERVICE.groupInvoicesBySum());
 
     }
 }

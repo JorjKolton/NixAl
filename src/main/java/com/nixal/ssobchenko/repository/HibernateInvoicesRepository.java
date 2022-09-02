@@ -9,7 +9,9 @@ import org.hibernate.type.IntegerType;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class HibernateInvoicesRepository {
@@ -66,9 +68,9 @@ public class HibernateInvoicesRepository {
 
     public List<Invoice> getAllInvoicesWherePriceBiggerThan(int price) {
         Session session = sessionFactory.openSession();
-        TypedQuery<Invoice> iQ = session.createQuery("from Invoice where price > :price ", Invoice.class)
+        TypedQuery<Invoice> invoiceQuery = session.createQuery("from Invoice where price > :price ", Invoice.class)
                 .setParameter("price", new BigDecimal(String.valueOf(price)));
-        List<Invoice> result = iQ.getResultList();
+        List<Invoice> result = invoiceQuery.getResultList();
         session.close();
         return result;
     }
@@ -84,13 +86,14 @@ public class HibernateInvoicesRepository {
         return true;
     }
 
-//    public Map<String, Integer> groupInvoicesBySum() {
-//        Map<String, Integer> result = new HashMap();
-//        Session session = sessionFactory.openSession();
-//        session.createQuery("select Invoice.price, count(price) from Invoice group by price order by price desc ")
-//                .getResultList()
-//                .forEach(item -> result.put(item[0].toString(), item[1]));
-//        session.close();
-//        return result;
-//    }
+    public Map<String, Integer> groupInvoicesBySum() {
+        Map<String, Integer> result = new HashMap<>();
+        Session session = sessionFactory.openSession();
+        TypedQuery<Object[]> query = session
+                .createQuery("select i.price, count(i.price) from Invoice i group by i.price", Object[].class);
+        List<Object[]> list = query.getResultList();
+        list.forEach(item -> result.put(item[0].toString(), Integer.valueOf(item[1].toString())));
+        session.close();
+        return result;
+    }
 }
