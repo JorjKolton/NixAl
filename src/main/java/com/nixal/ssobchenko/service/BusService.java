@@ -2,7 +2,7 @@ package com.nixal.ssobchenko.service;
 
 import com.nixal.ssobchenko.model.vehicle.Bus;
 import com.nixal.ssobchenko.model.vehicle.BusManufacturer;
-import com.nixal.ssobchenko.repository.DBBusesRepository;
+import com.nixal.ssobchenko.repository.HibernateBusesRepository;
 import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;
@@ -12,13 +12,13 @@ public class BusService extends VehicleService<Bus> {
     private static BusService instance;
 
     @ApplicationContext.Autowired
-    private BusService(DBBusesRepository repository) {
+    private BusService(HibernateBusesRepository repository) {
         super(repository);
     }
 
     public static BusService getInstance() {
         if (instance == null) {
-            instance = new BusService(DBBusesRepository.getInstance());
+            instance = new BusService(HibernateBusesRepository.getInstance());
         }
         return instance;
     }

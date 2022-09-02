@@ -1,19 +1,30 @@
 package com.nixal.ssobchenko.model.vehicle;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@Entity
+@Table(name = "Buses")
 public class Bus extends Vehicle {
     private int numberOfSeats;
+    @Column(name = "manufacturer")
+    @Enumerated(EnumType.STRING)
     private BusManufacturer busManufacturer;
 
     private Bus(Builder builder) {
@@ -87,5 +98,18 @@ public class Bus extends Vehicle {
                 ", model ='" + model + '\'' +
                 ", price = " + price + currency +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Bus bus = (Bus) o;
+        return id != null && Objects.equals(id, bus.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

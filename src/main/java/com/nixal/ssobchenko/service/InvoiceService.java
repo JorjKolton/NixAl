@@ -2,20 +2,19 @@ package com.nixal.ssobchenko.service;
 
 import com.nixal.ssobchenko.model.vehicle.Invoice;
 import com.nixal.ssobchenko.model.vehicle.Vehicle;
-import com.nixal.ssobchenko.repository.DBInvoicesRepository;
+import com.nixal.ssobchenko.repository.HibernateInvoicesRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 public class InvoiceService {
 
     private static InvoiceService instance;
 
-    private final DBInvoicesRepository repository;
+    private final HibernateInvoicesRepository repository;
 
     private InvoiceService() {
-        repository = DBInvoicesRepository.getInstance();
+        repository = HibernateInvoicesRepository.getInstance();
     }
 
     public static InvoiceService getInstance() {
@@ -51,8 +50,7 @@ public class InvoiceService {
         return repository.getAllInvoicesWherePriceBiggerThan(price);
     }
 
-    public Map<String, Integer> groupInvoicesBySum() {
-        return repository.groupInvoicesBySum();
-    }
-
-    }
+//    public Map<String, Integer> groupInvoicesBySum() {
+//        return repository.groupInvoicesBySum();
+//    }
+}

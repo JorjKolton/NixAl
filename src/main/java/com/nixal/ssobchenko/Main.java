@@ -1,6 +1,5 @@
 package com.nixal.ssobchenko;
 
-import com.nixal.ssobchenko.config.SQLScript;
 import com.nixal.ssobchenko.model.vehicle.Vehicle;
 import com.nixal.ssobchenko.service.BusService;
 import com.nixal.ssobchenko.service.CarService;
@@ -16,9 +15,8 @@ public class Main {
     private static final MotorcycleService MOTORCYCLE_SERVICE = MotorcycleService.getInstance();
     private static final InvoiceService INVOICE_SERVICE = InvoiceService.getInstance();
 
-    public static void main(String[] args) {
+    public static <list> void main(String[] args) {
 //        UserInputStart.start();
-        SQLScript.createAllTables();
 
         List<Vehicle> vehicles1 = new ArrayList<>();
         vehicles1.addAll(CAR_SERVICE.createAndSave(2));
@@ -43,7 +41,7 @@ public class Main {
         System.out.println("All invoices = " + INVOICE_SERVICE.getAll().size());
         System.out.println("Count of invoices where price bigger than 20000 = " +
                 INVOICE_SERVICE.getInvoicesWherePriceBiggerThan(20000).size());
-        System.out.println(INVOICE_SERVICE.groupInvoicesBySum());
+//        System.out.println(INVOICE_SERVICE.groupInvoicesBySum());
 
     }
 }

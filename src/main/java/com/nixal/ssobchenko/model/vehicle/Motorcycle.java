@@ -1,16 +1,29 @@
 package com.nixal.ssobchenko.model.vehicle;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "Motorcycles")
 public class Motorcycle extends Vehicle {
+    @Column(name = "body_type")
+    @Enumerated(EnumType.STRING)
     private MotorcycleBodyType bodyType;
+    @Column(name = "manufacturer")
+    @Enumerated(EnumType.STRING)
     private MotorcycleManufacturer motorcycleManufacturer;
 
     private Motorcycle(Builder builder) {
@@ -76,5 +89,25 @@ public class Motorcycle extends Vehicle {
                 motorcycleManufacturer + ", id = '" + id + '\'' +
                 ", model = '" + model + '\'' +
                 ", price = " + price + currency + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Motorcycle that = (Motorcycle) o;
+
+        if (bodyType != that.bodyType) return false;
+        return motorcycleManufacturer == that.motorcycleManufacturer;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (bodyType != null ? bodyType.hashCode() : 0);
+        result = 31 * result + (motorcycleManufacturer != null ? motorcycleManufacturer.hashCode() : 0);
+        return result;
     }
 }
