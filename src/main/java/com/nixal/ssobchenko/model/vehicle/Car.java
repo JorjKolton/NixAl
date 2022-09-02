@@ -1,18 +1,31 @@
 package com.nixal.ssobchenko.model.vehicle;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@Entity
+@Table(name = "Cars")
 public class Car extends Vehicle {
+    @Column(name = "body_type")
+    @Enumerated(EnumType.STRING)
     private CarBodyType bodyType;
+    @Column(name = "manufacturer")
+    @Enumerated(EnumType.STRING)
     private CarManufacturer carManufacturer;
 
     private Car(Builder builder) {
@@ -29,6 +42,7 @@ public class Car extends Vehicle {
         private int count;
         private String id;
         private LocalDateTime created;
+
 
         public Builder(int model, CarManufacturer carManufacturer, BigDecimal price) {
             this.model = model;
@@ -78,5 +92,18 @@ public class Car extends Vehicle {
                 carManufacturer + ", id = '" + id + '\'' +
                 ", model = '" + model + '\'' +
                 ", price = " + price + currency + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Car car = (Car) o;
+        return id != null && Objects.equals(id, car.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

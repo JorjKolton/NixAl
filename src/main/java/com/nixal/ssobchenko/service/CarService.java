@@ -3,7 +3,7 @@ package com.nixal.ssobchenko.service;
 import com.nixal.ssobchenko.model.vehicle.Car;
 import com.nixal.ssobchenko.model.vehicle.CarBodyType;
 import com.nixal.ssobchenko.model.vehicle.CarManufacturer;
-import com.nixal.ssobchenko.repository.DBCarsRepository;
+import com.nixal.ssobchenko.repository.HibernateCarsRepository;
 import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;
@@ -18,13 +18,13 @@ public class CarService extends VehicleService<Car> {
     private static CarService instance;
 
     @ApplicationContext.Autowired
-    private CarService(DBCarsRepository repository) {
+    private CarService(HibernateCarsRepository repository) {
         super(repository);
     }
 
     public static CarService getInstance() {
         if (instance == null) {
-            instance = new CarService(DBCarsRepository.getInstance());
+            instance = new CarService(HibernateCarsRepository.getInstance());
         }
         return instance;
     }

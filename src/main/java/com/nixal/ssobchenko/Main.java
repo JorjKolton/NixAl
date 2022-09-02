@@ -1,6 +1,5 @@
 package com.nixal.ssobchenko;
 
-import com.nixal.ssobchenko.config.SQLScript;
 import com.nixal.ssobchenko.model.vehicle.Vehicle;
 import com.nixal.ssobchenko.service.BusService;
 import com.nixal.ssobchenko.service.CarService;
@@ -18,7 +17,6 @@ public class Main {
 
     public static void main(String[] args) {
 //        UserInputStart.start();
-        SQLScript.createAllTables();
 
         List<Vehicle> vehicles1 = new ArrayList<>();
         vehicles1.addAll(CAR_SERVICE.createAndSave(2));

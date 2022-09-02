@@ -1,8 +1,10 @@
 package com.nixal.ssobchenko.model.vehicle;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -10,16 +12,29 @@ import java.util.List;
 
 @Getter
 @Setter
+@Entity
+@NoArgsConstructor
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Vehicle {
-    protected final String id;
+    @Id
+    protected String id;
     protected int model;
     protected BigDecimal price;
+    @Column(name = "vehicle_type")
+    @Enumerated(EnumType.STRING)
     protected VehicleType type;
+    @Transient
     protected List<String> details;
+    @Transient
     protected String currency;
+    @Transient
     protected int count;
     protected LocalDateTime created;
+    @Transient
     protected Engine engine;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "invoice_id")
+    protected Invoice invoice;
 
     protected Vehicle(String id, int model, BigDecimal price, VehicleType type, LocalDateTime created) {
         this.id = id;
