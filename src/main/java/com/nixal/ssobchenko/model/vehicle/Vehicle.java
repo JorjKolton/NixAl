@@ -1,5 +1,6 @@
 package com.nixal.ssobchenko.model.vehicle;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Vehicle {
     @Id
+    @SerializedName("_id")
     protected String id;
     protected int model;
     protected BigDecimal price;
