@@ -1,7 +1,10 @@
 package com.nixal.ssobchenko.repository.mongo;
 
 import com.google.gson.Gson;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Sorts;
 import com.nixal.ssobchenko.config.GsonUtil;
 import com.nixal.ssobchenko.config.MongoUtil;
 import com.nixal.ssobchenko.model.vehicle.Invoice;
@@ -9,8 +12,14 @@ import org.bson.Document;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import static com.mongodb.client.model.Aggregates.group;
+import static com.mongodb.client.model.Aggregates.sort;
 
 public class MongoInvoicesRepository {
     private final MongoCollection<Document> invoices;
@@ -80,16 +89,16 @@ public class MongoInvoicesRepository {
         return true;
     }
 
-//    public Map<String, Integer> groupInvoicesBySum() {
-//        Map<String, Integer> result = new HashMap<>();
-//        Session session = sessionFactory.openSession();
-//        TypedQuery<Object[]> query = session
-//                .createQuery("select i.price, count(i.price) from Invoice i group by i.price", Object[].class);
-//        List<Object[]> list = query.getResultList();
-//        list.forEach(item -> result.put(item[0].toString(), Integer.valueOf(item[1].toString())));
-//        session.close();
-//        return result;
-//    }
+    public Map<String, Integer> groupInvoicesBySum() {
+        Map<String, Integer> result = new HashMap<>();
+        AggregateIterable<Document> aggregate = invoices.aggregate(Arrays.asList(
+                group("$price", Accumulators.sum("count", 1)),
+                sort(Sorts.descending("count"))));
+        for (Document iter : aggregate) {
+            result.put(String.valueOf(iter.get("_id", Integer.class)), (int) iter.get("count"));
+        }
+        return result;
+    }
 
     private Document mapToDoc(Invoice invoice) {
         return Document.parse(gson.toJson(invoice));

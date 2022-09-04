@@ -6,6 +6,7 @@ import com.nixal.ssobchenko.repository.mongo.MongoInvoicesRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class InvoiceService {
 
@@ -50,7 +51,7 @@ public class InvoiceService {
 //        return repository.getAllInvoicesWherePriceBiggerThan(price);
 //    }
 
-//    public Map<String, Integer> groupInvoicesBySum() {
-//        return repository.groupInvoicesBySum();
-//    }
+    public Map<String, Integer> groupInvoicesBySum() {
+        return repository.groupInvoicesBySum();
+    }
 }
