@@ -47,9 +47,9 @@ public class InvoiceService {
         return repository.getAll();
     }
 
-//    public List<Invoice> getInvoicesWherePriceBiggerThan(int price) {
-//        return repository.getAllInvoicesWherePriceBiggerThan(price);
-//    }
+    public List<Invoice> getInvoicesWherePriceBiggerThan(int price) {
+        return repository.getAllInvoicesWherePriceBiggerThan(price);
+    }
 
     public Map<String, Integer> groupInvoicesBySum() {
         return repository.groupInvoicesBySum();

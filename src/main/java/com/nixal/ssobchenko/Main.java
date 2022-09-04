@@ -38,9 +38,9 @@ public class Main {
         INVOICE_SERVICE.createAndSaveInvoice(vehicles3);
 
         System.out.println("Count of invoices = " + INVOICE_SERVICE.countOfInvoices());
-//        System.out.println("All invoices = " + INVOICE_SERVICE.getAll().size());
-//        System.out.println("Count of invoices where price bigger than 20000 = " +
-//                INVOICE_SERVICE.getInvoicesWherePriceBiggerThan(20000).size());
+        System.out.println("All invoices = " + INVOICE_SERVICE.getAll().size());
+        System.out.println("Count of invoices where price bigger than 20000 = " +
+                INVOICE_SERVICE.getInvoicesWherePriceBiggerThan(20000).size());
         System.out.println(INVOICE_SERVICE.groupInvoicesBySum());
 
     }

@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 import com.nixal.ssobchenko.config.GsonUtil;
 import com.nixal.ssobchenko.config.MongoUtil;
 import com.nixal.ssobchenko.model.vehicle.Invoice;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -69,14 +71,12 @@ public class MongoInvoicesRepository {
                 .into(new ArrayList<>());
     }
 
-//    public List<Invoice> getAllInvoicesWherePriceBiggerThan(int price) {
-//        Session session = sessionFactory.openSession();
-//        TypedQuery<Invoice> invoiceQuery = session.createQuery("from Invoice where price > :price ", Invoice.class)
-//                .setParameter("price", new BigDecimal(String.valueOf(price)));
-//        List<Invoice> result = invoiceQuery.getResultList();
-//        session.close();
-//        return result;
-//    }
+    public List<Invoice> getAllInvoicesWherePriceBiggerThan(int price) {
+        Bson filter = Filters.gt("price", price);
+        return invoices.find(filter)
+                .map(item -> gson.fromJson(item.toJson(), Invoice.class))
+                .into(new ArrayList<>());
+    }
 
     public boolean updateInvoiceCreationTime(String id, LocalDateTime time) {
         final Document filter = new Document();
