@@ -3,7 +3,7 @@ package com.nixal.ssobchenko.service;
 import com.nixal.ssobchenko.model.vehicle.Car;
 import com.nixal.ssobchenko.model.vehicle.CarBodyType;
 import com.nixal.ssobchenko.model.vehicle.CarManufacturer;
-import com.nixal.ssobchenko.repository.MongoCarsRepository;
+import com.nixal.ssobchenko.repository.mongo.MongoCarsRepository;
 import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;

@@ -1,5 +1,6 @@
 package com.nixal.ssobchenko.model.vehicle;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,10 +23,11 @@ import java.util.UUID;
 @Table(name = "Invoices")
 public class Invoice {
     @Id
+    @SerializedName("_id")
     private String id;
     private LocalDateTime created;
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Vehicle> vehicles;
+    private transient List<Vehicle> vehicles;
     private BigDecimal price;
 
     private Invoice(Builder builder) {

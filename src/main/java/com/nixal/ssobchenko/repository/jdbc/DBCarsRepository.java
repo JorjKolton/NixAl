@@ -1,8 +1,10 @@
-package com.nixal.ssobchenko.repository;
+package com.nixal.ssobchenko.repository.jdbc;
 
 import com.nixal.ssobchenko.config.JDBCConfig;
-import com.nixal.ssobchenko.model.vehicle.Bus;
-import com.nixal.ssobchenko.model.vehicle.BusManufacturer;
+import com.nixal.ssobchenko.model.vehicle.Car;
+import com.nixal.ssobchenko.model.vehicle.CarBodyType;
+import com.nixal.ssobchenko.model.vehicle.CarManufacturer;
+import com.nixal.ssobchenko.repository.CrudRepository;
 import lombok.SneakyThrows;
 
 import java.math.BigDecimal;
@@ -16,26 +18,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DBBusesRepository implements CrudRepository<Bus> {
+public class DBCarsRepository implements CrudRepository<Car> {
 
-    private static DBBusesRepository instance;
+    private static DBCarsRepository instance;
 
     private final Connection connection;
 
-    private DBBusesRepository() {
+    private DBCarsRepository() {
         connection = JDBCConfig.getConnection();
     }
 
-    public static DBBusesRepository getInstance() {
+    public static DBCarsRepository getInstance() {
         if (instance == null) {
-            instance = new DBBusesRepository();
+            instance = new DBCarsRepository();
         }
         return instance;
     }
 
     @Override
-    public Optional<Bus> findById(String id) {
-        final String sql = "SELECT * FROM public.Buses WHERE id = ?";
+    public Optional<Car> findById(String id) {
+        final String sql = "SELECT * FROM public.Cars WHERE id = ?";
         try (final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, id);
             final ResultSet resultSet = preparedStatement.executeQuery();
@@ -50,10 +52,10 @@ public class DBBusesRepository implements CrudRepository<Bus> {
     }
 
     @Override
-    public List<Bus> getAll() {
-        final List<Bus> result = new ArrayList<>();
+    public List<Car> getAll() {
+        final List<Car> result = new ArrayList<>();
         try (final Statement statement = connection.createStatement()) {
-            final ResultSet resultSet = statement.executeQuery("SELECT * FROM public.Buses");
+            final ResultSet resultSet = statement.executeQuery("SELECT * FROM public.Cars");
             while (resultSet.next()) {
                 result.add(mapRowToObject(resultSet));
             }
@@ -64,17 +66,17 @@ public class DBBusesRepository implements CrudRepository<Bus> {
     }
 
     @Override
-    public boolean save(Bus bus) {
-        if (bus == null) {
-            throw new IllegalArgumentException("Buses must be not null");
+    public boolean save(Car car) {
+        if (car == null) {
+            throw new IllegalArgumentException("Car must be not null");
         }
-        if (bus.getPrice().equals(BigDecimal.ZERO)) {
-            bus.setPrice(BigDecimal.valueOf(-1));
+        if (car.getPrice().equals(BigDecimal.ZERO)) {
+            car.setPrice(BigDecimal.valueOf(-1));
         }
-        final String sql = "INSERT INTO public.Buses (id, vehicle_type, model, manufacturer, price, seats, created)" +
+        final String sql = "INSERT INTO public.Cars (id, vehicle_type, model, body_type, manufacturer, price, created)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            mapObjectToRow(preparedStatement, bus);
+            mapObjectToRow(preparedStatement, car);
             return preparedStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -82,22 +84,22 @@ public class DBBusesRepository implements CrudRepository<Bus> {
     }
 
     @Override
-    public boolean saveAll(List<Bus> buses) {
-        if (buses == null) {
+    public boolean saveAll(List<Car> cars) {
+        if (cars == null) {
             return false;
         }
-        buses.forEach(this::save);
+        cars.forEach(this::save);
         return true;
     }
 
     @Override
-    public boolean update(Bus bus) {
-        final String sql = "UPDATE public.Buses " +
-                "SET id = ?, vehicle_type = ?, model = ?, manufacturer = ?, price = ?, seats = ?,created = ? " +
+    public boolean update(Car car) {
+        final String sql = "UPDATE public.Cars " +
+                "SET id = ?, vehicle_type = ?, model = ?, body_type = ?, manufacturer = ?, price = ?, created = ? " +
                 "WHERE id = ?";
         try (final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(8, bus.getId());
-            mapObjectToRow(preparedStatement, bus);
+            preparedStatement.setString(8, car.getId());
+            mapObjectToRow(preparedStatement, car);
             return preparedStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -106,7 +108,7 @@ public class DBBusesRepository implements CrudRepository<Bus> {
 
     @Override
     public boolean delete(String id) {
-        final String sql = "DELETE FROM public.Buses WHERE id = ?";
+        final String sql = "DELETE FROM public.Cars WHERE id = ?";
         try (final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, id);
             return preparedStatement.execute();
@@ -117,7 +119,7 @@ public class DBBusesRepository implements CrudRepository<Bus> {
 
     @Override
     public void deleteAll() {
-        final String sql = "DELETE FROM public.Buses";
+        final String sql = "DELETE FROM public.Cars";
         try (final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.execute();
         } catch (SQLException e) {
@@ -126,26 +128,26 @@ public class DBBusesRepository implements CrudRepository<Bus> {
     }
 
     @SneakyThrows
-    private Bus mapRowToObject(final ResultSet resultSet) {
-        return new Bus.Builder(
+    private Car mapRowToObject(final ResultSet resultSet) {
+        return new Car.Builder(
                 resultSet.getInt("model"),
-                BusManufacturer.valueOf(resultSet.getString("manufacturer").toUpperCase()),
+                CarManufacturer.valueOf(resultSet.getString("manufacturer").toUpperCase()),
                 resultSet.getBigDecimal("price"))
                 .setId(resultSet.getString("id"))
-                .setNumberOfSeats(resultSet.getInt("seats"))
+                .setCarBodyType(CarBodyType.valueOf(resultSet.getString("body_type").toUpperCase()))
                 .setCreated(resultSet.getTimestamp("created").toLocalDateTime())
                 .build();
     }
 
     @SneakyThrows
-    private void mapObjectToRow(final PreparedStatement preparedStatement, final Bus bus) {
-        preparedStatement.setString(1, bus.getId());
-        preparedStatement.setString(2, "bus");
-        preparedStatement.setInt(3, bus.getModel());
-        preparedStatement.setString(4, bus.getBusManufacturer().name());
-        preparedStatement.setBigDecimal(5, bus.getPrice());
-        preparedStatement.setInt(6, bus.getNumberOfSeats());
-        preparedStatement.setTimestamp(7, Timestamp.valueOf(bus.getCreated()));
+    private void mapObjectToRow(final PreparedStatement preparedStatement, final Car car) {
+        preparedStatement.setString(1, car.getId());
+        preparedStatement.setString(2, "car");
+        preparedStatement.setInt(3, car.getModel());
+        preparedStatement.setString(4, car.getBodyType().name());
+        preparedStatement.setString(5, car.getCarManufacturer().name());
+        preparedStatement.setBigDecimal(6, car.getPrice());
+        preparedStatement.setTimestamp(7, Timestamp.valueOf(car.getCreated()));
         preparedStatement.addBatch();
     }
 }

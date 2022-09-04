@@ -3,7 +3,7 @@ package com.nixal.ssobchenko.service;
 import com.nixal.ssobchenko.model.vehicle.Motorcycle;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleBodyType;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleManufacturer;
-import com.nixal.ssobchenko.repository.MongoMotorcyclesRepository;
+import com.nixal.ssobchenko.repository.mongo.MongoMotorcyclesRepository;
 import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;

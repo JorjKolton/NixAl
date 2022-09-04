@@ -1,10 +1,11 @@
-package com.nixal.ssobchenko.repository;
+package com.nixal.ssobchenko.repository.mongo;
 
 import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
 import com.nixal.ssobchenko.config.GsonUtil;
 import com.nixal.ssobchenko.config.MongoUtil;
 import com.nixal.ssobchenko.model.vehicle.Car;
+import com.nixal.ssobchenko.repository.CrudRepository;
 import org.bson.Document;
 
 import java.util.ArrayList;

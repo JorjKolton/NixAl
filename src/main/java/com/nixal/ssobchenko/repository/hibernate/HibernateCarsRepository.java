@@ -1,72 +1,73 @@
-package com.nixal.ssobchenko.repository;
+package com.nixal.ssobchenko.repository.hibernate;
 
 import com.nixal.ssobchenko.config.HibernateFactoryUtil;
-import com.nixal.ssobchenko.model.vehicle.Bus;
+import com.nixal.ssobchenko.model.vehicle.Car;
+import com.nixal.ssobchenko.repository.CrudRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
 import java.util.Optional;
 
-public class HibernateBusesRepository implements CrudRepository<Bus> {
-    private static HibernateBusesRepository instance;
+public class HibernateCarsRepository implements CrudRepository<Car> {
+    private static HibernateCarsRepository instance;
 
     private final SessionFactory sessionFactory;
 
-    private HibernateBusesRepository() {
+    private HibernateCarsRepository() {
         sessionFactory = HibernateFactoryUtil.getSessionFactory();
     }
 
-    public static HibernateBusesRepository getInstance() {
+    public static HibernateCarsRepository getInstance() {
         if (instance == null) {
-            instance = new HibernateBusesRepository();
+            instance = new HibernateCarsRepository();
         }
         return instance;
     }
 
     @Override
-    public Optional<Bus> findById(String id) {
+    public Optional<Car> findById(String id) {
         Session session = sessionFactory.openSession();
-        Bus bus = session.get(Bus.class, id);
+        Car car = session.get(Car.class, id);
         session.close();
-        return Optional.of(bus);
+        return Optional.of(car);
     }
 
     @Override
-    public List<Bus> getAll() {
+    public List<Car> getAll() {
         Session session = sessionFactory.openSession();
-        final List<Bus> buses = session.createQuery("from Bus ", Bus.class).list();
+        final List<Car> cars = session.createQuery("from Car", Car.class).list();
         session.close();
-        return buses;
+        return cars;
     }
 
     @Override
-    public boolean save(Bus bus) {
-        if (bus == null) {
-            throw new IllegalArgumentException("Bus must be not null");
+    public boolean save(Car car) {
+        if (car == null) {
+            throw new IllegalArgumentException("Car must be not null");
         }
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.save(bus);
+        session.save(car);
         session.getTransaction().commit();
         session.close();
         return true;
     }
 
     @Override
-    public boolean saveAll(List<Bus> buses) {
-        if (buses == null) {
+    public boolean saveAll(List<Car> cars) {
+        if (cars == null) {
             return false;
         }
-        buses.forEach(this::save);
+        cars.forEach(this::save);
         return true;
     }
 
     @Override
-    public boolean update(Bus bus) {
+    public boolean update(Car car) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.update(bus);
+        session.update(car);
         session.getTransaction().commit();
         session.close();
         return true;
@@ -76,9 +77,9 @@ public class HibernateBusesRepository implements CrudRepository<Bus> {
     public boolean delete(String id) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.createQuery("DELETE FROM Bus WHERE id = :id")
+        session.createQuery("DELETE FROM Car WHERE id = :id")
                 .setParameter("id", id)
-                .executeUpdate();
+                        .executeUpdate();
         session.getTransaction().commit();
         session.close();
         return true;
@@ -88,7 +89,7 @@ public class HibernateBusesRepository implements CrudRepository<Bus> {
     public void deleteAll() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.createQuery("DELETE FROM Bus ").executeUpdate();
+        session.createQuery("DELETE FROM Car ").executeUpdate();
         session.getTransaction().commit();
         session.close();
     }

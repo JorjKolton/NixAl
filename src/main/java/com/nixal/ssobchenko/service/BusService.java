@@ -2,7 +2,7 @@ package com.nixal.ssobchenko.service;
 
 import com.nixal.ssobchenko.model.vehicle.Bus;
 import com.nixal.ssobchenko.model.vehicle.BusManufacturer;
-import com.nixal.ssobchenko.repository.MongoBusesRepository;
+import com.nixal.ssobchenko.repository.mongo.MongoBusesRepository;
 import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;
