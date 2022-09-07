@@ -2,7 +2,7 @@ package com.nixal.ssobchenko.service;
 
 import com.nixal.ssobchenko.model.vehicle.Invoice;
 import com.nixal.ssobchenko.model.vehicle.Vehicle;
-import com.nixal.ssobchenko.repository.mongo.MongoInvoicesRepository;
+import com.nixal.ssobchenko.repository.jdbc.DBInvoicesRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,10 +12,10 @@ public class InvoiceService {
 
     private static InvoiceService instance;
 
-    private final MongoInvoicesRepository repository;
+    private final DBInvoicesRepository repository;
 
     private InvoiceService() {
-        repository = MongoInvoicesRepository.getInstance();
+        repository = DBInvoicesRepository.getInstance();
     }
 
     public static InvoiceService getInstance() {
