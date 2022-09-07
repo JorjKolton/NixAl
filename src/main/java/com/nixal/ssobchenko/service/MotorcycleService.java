@@ -3,7 +3,7 @@ package com.nixal.ssobchenko.service;
 import com.nixal.ssobchenko.model.vehicle.Motorcycle;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleBodyType;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleManufacturer;
-import com.nixal.ssobchenko.repository.mongo.MongoMotorcyclesRepository;
+import com.nixal.ssobchenko.repository.jdbc.DBMotorcyclesRepository;
 import com.nixal.ssobchenko.util.ApplicationContext;
 
 import java.math.BigDecimal;
@@ -13,13 +13,13 @@ public class MotorcycleService extends VehicleService<Motorcycle> {
     private static MotorcycleService instance;
 
     @ApplicationContext.Autowired
-    private MotorcycleService(MongoMotorcyclesRepository repository) {
+    private MotorcycleService(DBMotorcyclesRepository repository) {
         super(repository);
     }
 
     public static MotorcycleService getInstance() {
         if (instance == null) {
-            instance = new MotorcycleService(MongoMotorcyclesRepository.getInstance());
+            instance = new MotorcycleService(DBMotorcyclesRepository.getInstance());
         }
         return instance;
     }
