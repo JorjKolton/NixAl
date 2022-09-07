@@ -1,5 +1,6 @@
 package com.nixal.ssobchenko;
 
+import com.nixal.ssobchenko.model.vehicle.Invoice;
 import com.nixal.ssobchenko.model.vehicle.Vehicle;
 import com.nixal.ssobchenko.service.BusService;
 import com.nixal.ssobchenko.service.CarService;
@@ -38,10 +39,14 @@ public class Main {
         INVOICE_SERVICE.createAndSaveInvoice(vehicles3);
 
         System.out.println("Count of invoices = " + INVOICE_SERVICE.countOfInvoices());
-        System.out.println("All invoices = " + INVOICE_SERVICE.getAll().size());
         System.out.println("Count of invoices where price bigger than 20000 = " +
                 INVOICE_SERVICE.getInvoicesWherePriceBiggerThan(20000).size());
         System.out.println(INVOICE_SERVICE.groupInvoicesBySum());
+
+        INVOICE_SERVICE.getAll()
+                .stream()
+                .map(Invoice::getVehicles)
+                .forEach(System.out::println);
 
     }
 }

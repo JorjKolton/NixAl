@@ -1,4 +1,4 @@
-package com.nixal.ssobchenko.repository;
+package com.nixal.ssobchenko.repository.hibernate;
 
 import com.nixal.ssobchenko.config.HibernateFactoryUtil;
 import com.nixal.ssobchenko.model.vehicle.Invoice;

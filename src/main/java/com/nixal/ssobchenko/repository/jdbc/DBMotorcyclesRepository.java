@@ -1,9 +1,10 @@
-package com.nixal.ssobchenko.repository;
+package com.nixal.ssobchenko.repository.jdbc;
 
 import com.nixal.ssobchenko.config.JDBCConfig;
 import com.nixal.ssobchenko.model.vehicle.Motorcycle;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleBodyType;
 import com.nixal.ssobchenko.model.vehicle.MotorcycleManufacturer;
+import com.nixal.ssobchenko.repository.CrudRepository;
 import lombok.SneakyThrows;
 
 import java.math.BigDecimal;
