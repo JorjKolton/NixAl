@@ -91,7 +91,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>8.5.11</version>
+            <version>9.2.3</version>
         </dependency>
 
     </dependencies>
@@ -141,6 +141,9 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>8.5.11</version>
+                <configuration>
+                    <configFiles>src/flywayConfig.properties</configFiles>
+                </configuration>
             </plugin>
         </plugins>
     </build>
