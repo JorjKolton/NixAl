@@ -7,6 +7,7 @@ import java.util.List;
 
 @Getter
 public enum Action {
+    FACTORY("Start factory", new FactoryS()),
     CREATE("Create vehicle", new Create()),
     CHANGE("Change vehicle", new Change()),
     PRINT("Print vehicles", new Print()),
