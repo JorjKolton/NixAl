@@ -1,11 +1,12 @@
-package com.nixal.ssobchenko;
+package com.nixal.ssobchenko.command;
 
 import com.nixal.ssobchenko.model.Factory;
 
-public class Main {
+public class FactoryS implements Command {
     private static final Factory FACTORY = new Factory();
 
-    public static void main(String[] args) {
+    @Override
+    public void execute() {
         FACTORY.startFactory();
     }
 }
